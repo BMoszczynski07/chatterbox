@@ -1,5 +1,55 @@
 <div class="login">
-  <div class="login__logo">
-    <img src="./icon.png" alt="Logo" />
+  <div class="login__logo-overlay">
+    <div class="login__logo">
+      <img src="./icon.png" alt="Logo" class="login__logo-img" />
+
+      <div class="login__logo-text">
+        <h1 class="login__logo-title">Chatterbox</h1>
+        <h2 class="login__logo-subtitle">Where conversations come to life</h2>
+      </div>
+    </div>
+
+    <form class="login__form">
+      <div class="login__form-input__container">
+        <i class="fa-solid fa-user login__form-input__icon"></i>
+
+        <input
+          type="text"
+          class="login__form-input"
+          placeholder="Username"
+          required
+        />
+      </div>
+
+      <div class="login__form-input__container">
+        <i class="fa-solid fa-key login__form-input__icon"></i>
+
+        <input
+          type="password"
+          class="login__form-input"
+          placeholder="Password"
+          required
+        />
+      </div>
+
+      <div class="login__btns">
+        <button class="login__show-pass">
+          <i class="fa-regular fa-eye"></i>
+
+          <h5 class="login__show-pass-text">Show password</h5>
+        </button>
+
+        <h5 class="login__to-register">
+          Don't have an account yet?
+          <a [routerLink]="['/register']">Register here</a>
+        </h5>
+      </div>
+
+      <button type="submit" class="login__form-submit">Login</button>
+    </form>
+  </div>
+
+  <div class="login__background">
+    <img src="./phone.png" alt="Background" class="login__background-img" />
   </div>
 </div>
