@@ -1,0 +1,31 @@
+@import "../../styles.scss";
+
+.not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 38px;
+  flex-wrap: wrap;
+  width: 50vw;
+  height: 350px;
+  background: #fff;
+  border-radius: 18px;
+  font-family: $i;
+
+  &__icon {
+    font-size: 72px;
+    color: #c31313;
+  }
+
+  &__title {
+    margin: 0;
+    color: #d94545;
+    padding: 0 5px;
+  }
+
+  &__subtitle {
+    margin: 0;
+    color: #e19090;
+    padding: 0 5px;
+  }
+}
