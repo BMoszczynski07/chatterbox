@@ -2,7 +2,7 @@
 
 .login {
   width: calc(650px - 50px);
-  height: 300px;
+  height: 340px;
   padding: 25px;
   background: #fff;
   border-radius: 18px;
@@ -11,7 +11,7 @@
 
   @media (max-width: 768px) {
     width: calc(320px - 50px);
-    height: 400px;
+    height: 450px;
   }
 
   &__logo {
@@ -76,7 +76,7 @@
     &-input__icon {
       position: relative;
       background: #e7e6e6;
-      color: #595959;
+      color: #737373;
       width: 42px;
       height: 42px;
       display: flex;
@@ -105,16 +105,19 @@
       color: #b5b5f1;
       font-family: $i;
       font-weight: 600;
-      margin-top: 20px;
+      margin-top: 10px;
       font-weight: 800;
       font-size: 16px;
       border-radius: 5px;
       cursor: pointer;
-    }
-  }
+      transition: 0.15s;
 
-  &__btns {
-    display: flex;
+      &--disabled {
+        cursor: default;
+        background: #b5a4ff;
+        color: #8178e7;
+      }
+    }
   }
 
   &__show-pass {
@@ -135,8 +138,9 @@
   }
 
   &__to-register {
-    margin: 0;
+    margin: 5px 0;
     width: 150px;
+    color: #797979;
   }
 
   &__background {
@@ -162,5 +166,10 @@
       transform: translate(-57%, -50%);
       width: 160px;
     }
+  }
+
+  &__err {
+    margin: 5px 0;
+    color: #c41414;
   }
 }

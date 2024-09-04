@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <form class="login__form">
+    <form class="login__form" (submit)="handleSubmitForm($event)">
       <div class="login__form-input__container">
         <i class="fa-solid fa-user login__form-input__icon"></i>
 
@@ -17,6 +17,8 @@
           type="text"
           class="login__form-input"
           placeholder="Username"
+          [(ngModel)]="form.username"
+          [ngModelOptions]="{ standalone: true }"
           required
         />
       </div>
@@ -28,9 +30,17 @@
           type="password"
           class="login__form-input"
           placeholder="Password"
+          [(ngModel)]="form.password"
+          [ngModelOptions]="{ standalone: true }"
           required
         />
       </div>
+
+      @if (err) {
+      <h5 class="login__err">
+        Nie znaleziono takiego użytkownika w bazie danych
+      </h5>
+      }
 
       <div class="login__btns">
         <button class="login__show-pass">
@@ -45,7 +55,16 @@
         </h5>
       </div>
 
-      <button type="submit" class="login__form-submit">Login</button>
+      <button
+        type="submit"
+        [class]="
+          form.username !== '' && form.password !== ''
+            ? 'login__form-submit'
+            : 'login__form-submit login__form-submit--disabled'
+        "
+      >
+        Login
+      </button>
     </form>
   </div>
 
