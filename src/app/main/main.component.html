@@ -1,1 +1,175 @@
-<p>main works!</p>
+<div class="main">
+  <div class="main__computer">
+    <div class="main__computer-user">
+      <a href="#">
+        <img class="main__computer-site-logo" src="./icon.png" alt="logo" />
+      </a>
+
+      <button class="main__computer-logo__overlay">
+        <div class="main__computer-logo__container">
+          <img
+            [src]="userService.user?.profile_pic"
+            alt="user-logo"
+            class="main__computer-user-logo"
+          />
+        </div>
+      </button>
+    </div>
+
+    <div class="main__computer-conversations">
+      <h1 class="main__computer-active-users__header">
+        <div class="main__computer-active-icon__small"></div>
+        Active users (3)
+      </h1>
+
+      <div class="main__computer-active-users">
+        <button class="main__computer-active-user">
+          <div class="main__computer-logo__overlay">
+            <div class="main__computer-logo__container">
+              <img
+                src="http://localhost:8080/static/l.png"
+                class="main__computer-user-logo"
+                alt="A"
+              />
+            </div>
+
+            <div class="main__computer-active-icon"></div>
+          </div>
+
+          <h5 class="main__computer-active-user__name">Lara Erikson</h5>
+        </button>
+
+        <button class="main__computer-active-user">
+          <div class="main__computer-logo__overlay">
+            <div class="main__computer-logo__container">
+              <img
+                src="http://localhost:8080/static/d.png"
+                class="main__computer-user-logo"
+                alt="A"
+              />
+            </div>
+
+            <div class="main__computer-active-icon"></div>
+          </div>
+
+          <h5 class="main__computer-active-user__name">Dan Stinson</h5>
+        </button>
+
+        <button class="main__computer-active-user">
+          <div class="main__computer-logo__overlay">
+            <div class="main__computer-logo__container">
+              <img
+                src="http://localhost:8080/static/m.png"
+                class="main__computer-user-logo"
+                alt="A"
+              />
+            </div>
+
+            <div class="main__computer-active-icon"></div>
+          </div>
+
+          <h5 class="main__computer-active-user__name">Murray Larson</h5>
+        </button>
+      </div>
+
+      <h1 class="main__computer-all-conversations__header">
+        Conversations (3)
+      </h1>
+
+      <div class="main__computer-all-conversations">
+        <button class="main__computer-one-conversation">
+          <div class="main__computer-logo__overlay">
+            <div class="main__computer-logo__container">
+              <img
+                src="http://localhost:8080/static/l.png"
+                class="main__computer-user-logo"
+                alt="A"
+              />
+            </div>
+          </div>
+
+          <div class="main__computer-conversation-info">
+            <h1 class="main__computer-conversation-name">Lara Erikson</h1>
+            <h2
+              class="main__computer-conversation-last-message main__computer-conversation-last-message--unread"
+            >
+              Hello, Bartek! How are you doing?
+            </h2>
+            <h3 class="main__computer-conversation-sent">
+              <i class="fa-solid fa-circle-check"></i> Sent at 1:45 PM
+            </h3>
+          </div>
+        </button>
+
+        <button
+          class="main__computer-one-conversation main__computer-one-conversation--selected"
+        >
+          <div class="main__computer-logo__overlay">
+            <div class="main__computer-logo__container">
+              <img
+                src="http://localhost:8080/static/m.png"
+                class="main__computer-user-logo"
+                alt="A"
+              />
+            </div>
+          </div>
+
+          <div class="main__computer-conversation-info">
+            <h1 class="main__computer-conversation-name">Murray Larson</h1>
+            <h2 class="main__computer-conversation-last-message">
+              You: Hey, Murray!
+            </h2>
+            <h3 class="main__computer-conversation-sent">
+              <i class="fa-solid fa-circle-check"></i> Sent at 2:30 PM
+            </h3>
+          </div>
+        </button>
+
+        <button class="main__computer-one-conversation">
+          <div class="main__computer-logo__overlay">
+            <div class="main__computer-logo__container">
+              <img
+                src="http://localhost:8080/static/d.png"
+                class="main__computer-user-logo"
+                alt="A"
+              />
+            </div>
+          </div>
+
+          <div class="main__computer-conversation-info">
+            <h1 class="main__computer-conversation-name">Dan Stinson</h1>
+            <h2 class="main__computer-conversation-last-message">Heyy! :3</h2>
+            <h3 class="main__computer-conversation-sent">
+              <i class="fa-solid fa-circle-check"></i> Sent at 5:10 PM
+            </h3>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <div class="main__computer-conversation">
+      <div class="main__computer-conversation-information">
+        <div class="main__computer-logo__overlay">
+          <div class="main__computer-logo__container">
+            <img
+              src="http://localhost:8080/static/m.png"
+              class="main__computer-user-logo"
+              alt="A"
+            />
+          </div>
+
+          <div class="main__computer-active-icon"></div>
+        </div>
+
+        <div class="main__computer-conversation-information__overlay">
+          <h1 class="main__computer-name-of-conversation">Murray Larson</h1>
+          <h2 class="main__computer-is-active">Active now</h2>
+        </div>
+
+        <i class="fa-solid fa-ellipsis main__computer-conversation-more"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="main__phone"></div>
+</div>

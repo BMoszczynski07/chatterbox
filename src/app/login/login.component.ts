@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { UserService } from '../user.service';
+import { CookieService } from '../cookie.service';
 
 @Component({
   selector: 'app-login',
@@ -10,17 +12,28 @@ import { RouterModule } from '@angular/router';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  err: boolean = false;
+  constructor(public userService: UserService, private router: Router) {}
 
   form = {
     username: '',
     password: '',
   };
 
-  handleSubmitForm = (e: Event) => {
+  err = {
+    display: false,
+    message: '',
+  };
+
+  handleSubmitForm = async (e: Event) => {
     e.preventDefault();
 
     if (this.form.username === '' || this.form.password === '') return;
-    console.log('submit');
+
+    try {
+      await this.userService.handleLogin(this.form);
+    } catch (err: any) {
+      this.err.display = true;
+      this.err.message = err.message;
+    }
   };
 }

@@ -13,3 +13,8 @@ body {
   min-height: 100vh;
   font-family: $i;
 }
+
+*::selection {
+  background: #b0bcfb;
+  color: #4458bb;
+}

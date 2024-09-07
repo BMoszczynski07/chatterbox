@@ -36,18 +36,18 @@
         />
       </div>
 
-      @if (err) {
+      @if (err.display) {
       <h5 class="login__err">
-        Nie znaleziono takiego użytkownika w bazie danych
+        {{ err.message }}
       </h5>
       }
 
       <div class="login__btns">
-        <button class="login__show-pass">
+        <!-- <button class="login__show-pass">
           <i class="fa-regular fa-eye"></i>
 
           <h5 class="login__show-pass-text">Show password</h5>
-        </button>
+        </button> -->
 
         <h5 class="login__to-register">
           Don't have an account yet?

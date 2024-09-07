@@ -1,0 +1,243 @@
+@import "../../styles.scss";
+
+.main {
+  &__computer {
+    display: flex;
+    width: 100vw;
+
+    &-user,
+    &-conversations,
+    &-conversation {
+      height: calc(100svh - 24px);
+      margin: 12px;
+      margin-right: 0;
+      background: #fff;
+      border-radius: 8px;
+      padding: 0 8px;
+    }
+
+    &-user {
+      width: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &-conversations {
+      width: 300px;
+    }
+
+    &-conversation {
+      width: calc(100vw - 12px - 50px - 12px - 300px - 12px - 12px - 16px * 3);
+    }
+
+    &-site-logo {
+      width: 36px;
+      margin-top: 8px;
+    }
+
+    &-logo__overlay {
+      position: relative;
+      width: 36px;
+      height: 36px;
+      margin-bottom: 8px;
+      padding: 5px;
+      transition: 0.15s;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+
+      &:hover {
+        background: #ebebeb;
+      }
+    }
+
+    &-logo__container {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    &-user-logo {
+      width: 100%;
+    }
+
+    &-active-users__header,
+    &-all-conversations__header {
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 5px;
+    }
+
+    &-active-icon__small {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #12df19;
+    }
+
+    &-active-users {
+      overflow-x: scroll;
+      display: flex;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    &-active-user {
+      border: none;
+      background: transparent;
+      margin: 0 5px;
+      padding: 12px;
+      min-width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: column;
+      gap: 12px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: 0.15s;
+
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+
+    &-active-user__name {
+      margin: 0;
+      font-weight: 500;
+      font-family: $i;
+    }
+
+    &-active-icon {
+      position: absolute;
+      bottom: 3px;
+      right: 3px;
+      width: 12px;
+      height: 12px;
+      background: #12df19;
+      border-radius: 50%;
+    }
+
+    &-all-conversations {
+      overflow-y: scroll;
+      height: 350px;
+      padding: 0 5px;
+
+      &::-webkit-scrollbar {
+        width: 3px;
+        background: #c4c4c4;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #747474;
+      }
+    }
+
+    &-one-conversation {
+      border: none;
+      margin: 5px 0;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 5px;
+      font-family: $i;
+      width: 100%;
+      transition: 0.15s;
+
+      &:hover {
+        background: #f0f0f0;
+      }
+
+      &--selected {
+        background: #f0f0f0;
+      }
+    }
+
+    &-conversation-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 220px;
+      margin-left: 5px;
+    }
+
+    &-conversation-name {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    &-conversation-last-message {
+      margin: 0;
+      font-size: 12px;
+      text-align: left;
+      font-weight: 400;
+
+      &--unread {
+        font-weight: 700;
+      }
+    }
+
+    &-conversation-sent {
+      color: #36a2b0;
+      margin: 0;
+      margin-top: 5px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    &-conversation-information {
+      position: relative;
+      background: #f0f0f0;
+      margin: 5px 0;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    &-name-of-conversation {
+      margin: 0;
+      font-size: 19px;
+    }
+
+    &-conversation-information__overlay {
+      margin: 0 5px;
+    }
+
+    &-is-active {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    &-conversation-more {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: 0.15s;
+      padding: 12px;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &:hover {
+        background: #e1e1e1;
+      }
+    }
+  }
+
+  &__phone {
+    margin: 0;
+  }
+}
