@@ -137,9 +137,36 @@
       }
     }
 
+    &-search-conversations__form {
+      margin: 12px 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    &-search-conversations__input {
+      width: 200px;
+      padding: 8px;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+      border: none;
+      background: #f0f0f0;
+      font-family: $i;
+      letter-spacing: -0.3px;
+      font-weight: 500;
+    }
+
+    &-search-conversations__icon {
+      background: #f0f0f0;
+      border: none;
+      padding: 0 12px;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      cursor: pointer;
+    }
+
     &-all-conversations {
       overflow-y: scroll;
-      height: 350px;
+      height: 300px;
       padding: 0 5px;
 
       &::-webkit-scrollbar {
@@ -355,6 +382,7 @@
       font-size: 13px;
       text-align: center;
       color: #909090;
+      font-style: italic;
     }
 
     &-message__container {
@@ -377,6 +405,7 @@
 
       &--image {
         padding: 0;
+        width: 300px;
       }
     }
   }
