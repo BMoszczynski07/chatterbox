@@ -79,6 +79,7 @@
       align-items: center;
       justify-content: flex-start;
       gap: 5px;
+      letter-spacing: -0.3px;
     }
 
     &-active-users {
@@ -221,6 +222,7 @@
       text-align: left;
       font-weight: 400;
       word-break: break-all;
+      letter-spacing: -0.4px;
 
       &--unread {
         font-weight: 700;
@@ -233,6 +235,7 @@
       margin-top: 5px;
       font-size: 12px;
       font-weight: 600;
+      letter-spacing: -0.2px;
     }
 
     &-conversation {
