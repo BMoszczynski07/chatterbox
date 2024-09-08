@@ -18,7 +18,9 @@
 
     <div class="main__computer-conversations">
       <h1 class="main__computer-active-users__header">
-        <div class="main__computer-active-icon__small"></div>
+        <div
+          class="main__computer-active-icon main__computer-active-icon--small"
+        ></div>
         Active users (3)
       </h1>
 
@@ -149,7 +151,7 @@
 
     <div class="main__computer-conversation">
       <div class="main__computer-conversation-information">
-        <div class="main__computer-logo__overlay">
+        <button class="main__computer-logo__overlay">
           <div class="main__computer-logo__container">
             <img
               src="http://localhost:8080/static/m.png"
@@ -159,15 +161,93 @@
           </div>
 
           <div class="main__computer-active-icon"></div>
-        </div>
+        </button>
 
         <div class="main__computer-conversation-information__overlay">
           <h1 class="main__computer-name-of-conversation">Murray Larson</h1>
           <h2 class="main__computer-is-active">Active now</h2>
         </div>
 
-        <i class="fa-solid fa-ellipsis main__computer-conversation-more"></i>
+        <button class="main__computer-conversation__more-btn">
+          <i class="fa-solid fa-ellipsis main__computer-conversation__more"></i>
+        </button>
       </div>
+
+      <div class="main__computer-conversation__messages">
+        <div class="main__computer-conversation__start-of-conversation">
+          <div
+            class="main__computer-conversation__start-of-conversation__overlay"
+          >
+            <button
+              class="main__computer-logo__overlay main__computer-logo__overlay--big"
+            >
+              <div class="main__computer-logo__container">
+                <img
+                  src="http://localhost:8080/static/m.png"
+                  class="main__computer-user-logo"
+                  alt="A"
+                />
+              </div>
+
+              <div
+                class="main__computer-active-icon main__computer-active-icon--big"
+              ></div>
+            </button>
+
+            <div class="main__computer-conversation__start-info">
+              <h1 class="main__computer-conversation__name">Murray Larson</h1>
+              <h2 class="main__computer-user-desc">Lorem ipsum dolor sit</h2>
+              <h2 class="main__computer-since">
+                On chatterbox since: 16 March 2024
+              </h2>
+            </div>
+          </div>
+
+          <h3 class="main__computer-start">
+            This is the beggining of your conversation with Murray Larson
+          </h3>
+        </div>
+
+        <div
+          class="main__computer-message__container main__computer-message__container--mine"
+        >
+          <h5 class="main__computer-message">
+            Lorem ipsum dolor sit amet consectetur
+          </h5>
+        </div>
+
+        <div class="main__computer-message__container">
+          <h5 class="main__computer-message">
+            Lorem ipsum dolor sit amet consectetur
+          </h5>
+        </div>
+
+        <div
+          class="main__computer-message__container main__computer-message__container--mine"
+        >
+          <img
+            src="http://localhost:8080/static/amogus.jpg"
+            class="main__computer-message main__computer-message--image"
+            alt="message"
+          />
+        </div>
+      </div>
+
+      <form class="main__computer-conversation__send-message__form">
+        <textarea
+          class="main__computer-conversation__send-message"
+          placeholder="Type your message"
+        ></textarea>
+        <button class="main__computer-conversation__attach-image" type="button">
+          <i class="fa-solid fa-image"></i>
+        </button>
+        <button
+          class="main__computer-conversation__send main__computer-conversation__send--disabled"
+          type="submit"
+        >
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </form>
     </div>
   </div>
 
