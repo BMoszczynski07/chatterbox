@@ -60,4 +60,37 @@
   &__logo-overlay:hover &__logo-pen {
     opacity: 1;
   }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__information {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 25px;
+    gap: 42px;
+  }
+
+  &__input-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__label {
+    font-size: 13px;
+    letter-spacing: -0.3px;
+  }
+
+  &__input {
+    margin-bottom: 12px;
+    font-size: 17px;
+    font-family: $i;
+  }
+
+  &__input:focus &__label {
+    color: #f00;
+  }
 }
