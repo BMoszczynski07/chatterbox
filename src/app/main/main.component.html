@@ -5,7 +5,10 @@
         <img class="main__computer-site-logo" src="./icon.png" alt="logo" />
       </a>
 
-      <button class="main__computer-logo__overlay">
+      <button
+        [routerLink]="'/user/' + userService.user?.unique_id"
+        class="main__computer-logo__overlay"
+      >
         <div class="main__computer-logo__container">
           <img
             [src]="userService.user?.profile_pic"
@@ -192,6 +195,7 @@
             class="main__computer-conversation__start-of-conversation__overlay"
           >
             <button
+              routerLink="/user/murray-larson"
               class="main__computer-logo__overlay main__computer-logo__overlay--big"
             >
               <div class="main__computer-logo__container">

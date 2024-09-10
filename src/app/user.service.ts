@@ -10,13 +10,52 @@ import { Router } from '@angular/router';
 export class UserService {
   constructor(
     private backendURLService: BackendUrlService,
-    private cookieService: CookieService,
     private router: Router
   ) {}
 
   user: User | null = null;
 
   TOKEN_EXPIRES_IN = 1;
+
+  handleGetUser = async (token: string | null) => {
+    const userRequest = await fetch(
+      `${this.backendURLService.backendURL}/user/get`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!userRequest.ok) {
+      if (userRequest.status === 401) {
+        // show notification when the token is invalid
+
+        this.router.navigate(['/login']);
+        this.user = null;
+      }
+
+      const errorData = await userRequest.json();
+      throw new Error(errorData);
+    }
+
+    const data = await userRequest.json();
+
+    console.log(data);
+
+    this.user = new User(
+      data.id,
+      data.unique_id,
+      data.name,
+      data.pass,
+      data.create_date,
+      data.email,
+      data.verified,
+      data.socket_id,
+      data.profile_pic
+    );
+  };
 
   handleLogin = async (user: { username: string; password: string }) => {
     const findUserRequest = await fetch(
