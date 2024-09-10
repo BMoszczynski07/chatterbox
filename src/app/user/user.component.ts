@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserService } from '../user.service';
 import { CookieService } from '../cookie.service';
+import { Notification } from '../../notification/Notification';
 
 @Component({
   selector: 'app-user',
@@ -12,13 +13,26 @@ import { CookieService } from '../cookie.service';
 })
 export class UserComponent implements OnInit {
   constructor(
-    private userService: UserService,
-    private cookieService: CookieService
+    public userService: UserService,
+    private cookieService: CookieService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
+  unique_id: string | null = null;
+
   async ngOnInit(): Promise<void> {
-    await this.userService.handleGetUser(
-      this.cookieService.getCookieValue('token')
-    );
+    this.unique_id = this.route.snapshot.paramMap.get('unique_id');
+
+    try {
+      await this.userService.handleGetUser(
+        this.cookieService.getCookieValue('token')
+      );
+    } catch (err) {
+      console.error(err);
+
+      this.router.navigate(['/login']);
+      this.userService.user = null;
+    }
   }
 }

@@ -16,5 +16,31 @@
         <i class="fa-solid fa-pen"></i>
       </div>
     </div>
+
+    <div class="user__info">
+      @if (unique_id === userService.user?.unique_id) {
+      <form class="user__form">
+        <div class="user__input-container">
+          <label for="unique_id" class="user__label">Login</label>
+          <input
+            type="text"
+            class="user__input"
+            [value]="userService.user?.unique_id"
+          />
+        </div>
+
+        <div class="user__input-container">
+          <label for="name">First name and last name</label>
+          <input
+            type="text"
+            class="user__input"
+            [value]="userService.user?.name"
+          />
+        </div>
+
+        <h5 class="user__change-pass">Zmień hasło</h5>
+      </form>
+      } @else { }
+    </div>
   </div>
 </div>

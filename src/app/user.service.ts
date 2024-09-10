@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BackendUrlService } from './backend-url.service';
 import { User } from './classes/User';
-import { CookieService } from './cookie.service';
 import { Router } from '@angular/router';
+import { Notification } from '../notification/Notification';
 
 @Injectable({
   providedIn: 'root',
@@ -32,8 +32,10 @@ export class UserService {
       if (userRequest.status === 401) {
         // show notification when the token is invalid
 
-        this.router.navigate(['/login']);
-        this.user = null;
+        const notification = new Notification(
+          'Your session has expired. Please sign in again.'
+        );
+        notification.handleCreate();
       }
 
       const errorData = await userRequest.json();
@@ -41,8 +43,6 @@ export class UserService {
     }
 
     const data = await userRequest.json();
-
-    console.log(data);
 
     this.user = new User(
       data.id,

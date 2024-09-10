@@ -1,0 +1,59 @@
+@keyframes notification-bar-out {
+  0% {
+    width: 100%;
+  }
+
+  100% {
+    width: 0;
+  }
+}
+
+.notification {
+  background: #ffffff;
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  border-radius: 8px;
+  width: 250px;
+  height: 100px;
+  padding: 8px;
+  overflow: hidden;
+
+  &__content {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    width: 200px;
+  }
+
+  &__close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    border-radius: 5px;
+    transition: 0.15s;
+
+    &:hover {
+      background: #f0f0f0;
+    }
+  }
+
+  &__bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 5px;
+    width: 100%;
+    background: rgb(0, 0, 0);
+    animation: notification-bar-out 3s linear forwards;
+  }
+}

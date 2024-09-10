@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../user.service';
@@ -11,8 +11,12 @@ import { CookieService } from '../cookie.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
-  constructor(public userService: UserService, private router: Router) {}
+export class LoginComponent implements OnInit {
+  constructor(
+    public userService: UserService,
+    private router: Router,
+    private cookieService: CookieService
+  ) {}
 
   form = {
     username: '',
@@ -23,6 +27,17 @@ export class LoginComponent {
     display: false,
     message: '',
   };
+
+  async ngOnInit(): Promise<void> {
+    try {
+      await this.userService.handleGetUser(
+        this.cookieService.getCookieValue('token')
+      );
+      this.router.navigate(['/']);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   handleSubmitForm = async (e: Event) => {
     e.preventDefault();
