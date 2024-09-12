@@ -12,6 +12,8 @@ import { User } from '../classes/User';
 import { CommonModule } from '@angular/common';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { FileSizePipe } from '../file-size.pipe';
+import { BackendUrlService } from '../backend-url.service';
+import { Notification } from '../../notification/Notification';
 
 @Component({
   selector: 'app-user',
@@ -25,7 +27,8 @@ export class UserComponent implements OnInit {
     public userService: UserService,
     private cookieService: CookieService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private backendUrlService: BackendUrlService
   ) {}
 
   unique_id: string | null = null;
@@ -44,8 +47,7 @@ export class UserComponent implements OnInit {
   fileSize!: number;
 
   imageChangedEvent!: Event;
-  croppedImage: string | null | undefined;
-  croppedImageBlob!: Blob;
+  croppedImage: Blob | null | undefined;
 
   handleFileChange(event: any): void {
     const input = event.target as HTMLInputElement;
@@ -64,28 +66,60 @@ export class UserComponent implements OnInit {
   }
 
   handleImageCropped(event: ImageCroppedEvent): void {
-    this.croppedImage = event.objectUrl;
-
-    if (this.croppedImage) {
-      const byteString = atob(this.croppedImage.split(',')[1]);
-      const mimeString = this.croppedImage
-        .split(',')[0]
-        .split(':')[1]
-        .split(';')[0];
-      const ab = new ArrayBuffer(byteString.length);
-      const ia = new Uint8Array(ab);
-
-      for (let i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-      }
-
-      this.croppedImageBlob = new Blob([ab], { type: mimeString });
-    }
+    this.croppedImage = event.blob;
   }
 
-  handleUploadCroppedImage(): void {
+  async handleUploadCroppedImage(event: Event): Promise<void> {
+    event.preventDefault();
+
     if (this.croppedImage) {
-      console.log('Uploading cropped image:', this.croppedImage);
+      const formData = new FormData();
+
+      const fileExtension = this.fileName.split('.').pop() || 'jpg'; // Default to jpg if no extension
+
+      if (
+        fileExtension !== 'jpg' &&
+        fileExtension !== 'png' &&
+        fileExtension !== 'gif'
+      ) {
+        const extensionNotification = new Notification(
+          'Invalid file extension'
+        );
+        extensionNotification.handleCreate();
+
+        this.uploadPhotoModal = false;
+        return;
+      }
+
+      formData.append(
+        'file',
+        this.croppedImage,
+        `${this.userService.user?.unique_id}.${fileExtension}`
+      );
+
+      console.log(formData.get('file'));
+
+      const fileRequest = await fetch(
+        `${this.backendUrlService.backendURL}/profile-pic/img`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${this.cookieService.getCookieValue(
+              'token'
+            )}`,
+          },
+          body: formData,
+        }
+      );
+
+      const fileRequestData = await fileRequest.json();
+
+      this.uploadPhotoModal = false;
+
+      this.router.navigate([`/user/${this.userService.user?.unique_id}`]);
+
+      const fileNotification = new Notification(fileRequestData.message);
+      fileNotification.handleCreate();
     }
   }
 
