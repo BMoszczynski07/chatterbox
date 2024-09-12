@@ -1,27 +1,120 @@
 <div class="user">
   <button routerLink="/main" class="user__back">
     <i class="fa-solid fa-arrow-left"></i>
-    Powrót do strony głównej
+    Back to the main page
   </button>
 
   <div class="user__information">
-    <div class="user__logo-overlay">
+    @if (uploadPhotoModal) {
+    <div class="user__modal-background">
+      <div class="user__modal">
+        <h1 class="user__upload-photo__title">Upload an image</h1>
+
+        @if (imageChangedEvent) {
+        <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          [aspectRatio]="1"
+          format="png"
+          (imageCropped)="handleImageCropped($event)"
+          [cropperMinWidth]="100"
+          [cropperMinHeight]="100"
+        ></image-cropper>
+        }
+
+        <form class="user__modal-form">
+          <div class="user__custom-upload-photo">
+            <label
+              for="file-input"
+              class="user__custom-label"
+              (click)="handleCustomLabelClick()"
+            >
+              <button type="button" class="user__choose-an-image">
+                Choose an image
+              </button>
+              <div class="user__file">
+                @if (fileName) {
+                <i class="fa-solid fa-image user__file-img__icon"></i>
+                <div class="user__file-img">
+                  <h5 class="user__file-name">{{ fileName }}</h5>
+                  <h5 class="user__file-size">
+                    {{ fileSize | fileSize }}
+                  </h5>
+                </div>
+                }
+              </div>
+            </label>
+            <input
+              type="file"
+              id="file-input"
+              #fileInput
+              accept="image/*"
+              class="user__upload"
+              (change)="handleFileChange($event)"
+            />
+          </div>
+          <div class="user__upload-btns">
+            <button
+              class="user__upload-photo__button"
+              type="submit"
+              (click)="handleUploadCroppedImage()"
+            >
+              Upload
+            </button>
+            <button
+              class="user__upload-close"
+              (click)="handleToggleUploadPhotoModal()"
+              type="button"
+            >
+              Close
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    } @if (displayPhoto) {
+    <div class="user__display-photo">
+      <button class="user__logo-overlay user__logo-overlay--display-photo">
+        <img
+          [src]="user?.profile_pic"
+          alt="user-logo"
+          class="user__user-logo"
+        />
+      </button>
+
+      <button
+        class="user__display-photo__close"
+        (click)="handleToggleDisplayPhoto()"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    } @if (userLoading) {
+    <div class="user__loading">
+      <div class="user__circle-loading"></div>
+      <div class="user__rect-loading__container">
+        <div class="user__rect-loading"></div>
+        <div class="user__rect-loading"></div>
+        <div class="user__rect-loading"></div>
+      </div>
+    </div>
+    } @if (unique_id === userService.user?.unique_id) {
+    <button class="user__logo-overlay">
       <img
-        src="http://localhost:8080/static/j.png"
+        [src]="userService.user?.profile_pic"
         alt="user-logo"
         class="user__user-logo"
       />
 
-      <div class="user__logo-pen">
+      <button class="user__logo-pen" (click)="handleToggleUploadPhotoModal()">
         <i class="fa-solid fa-pen"></i>
-      </div>
-    </div>
+      </button>
+    </button>
 
-    @if (unique_id === userService.user?.unique_id) {
     <form class="user__form">
       <div class="user__input-container">
         <label for="unique_id" class="user__label">Login</label>
         <input
+          id="unique_id"
           type="text"
           class="user__input"
           [value]="userService.user?.unique_id"
@@ -29,18 +122,64 @@
       </div>
 
       <div class="user__input-container">
-        <label for="name" class="user__label">First name and last name</label>
+        <label for="first-name" class="user__label">First name</label>
         <input
+          id="first-name"
           type="text"
           class="user__input"
-          [value]="userService.user?.name"
+          [value]="userService.user?.first_name"
         />
       </div>
 
-      <button class="user__change-pass">Zmień hasło</button>
+      <div class="user__input-container">
+        <label for="last-name" class="user__label">Last name</label>
+        <input
+          id="last-name"
+          type="text"
+          class="user__input"
+          [value]="userService.user?.last_name"
+        />
+      </div>
 
-      <button class="user__save-changes" type="submit">Zapisz zmiany</button>
+      <div class="user__input-container">
+        <label for="desc" class="user__label">Description</label>
+        <textarea
+          id="desc"
+          type="text"
+          class="user__input"
+          [value]="userService.user?.user_desc"
+        ></textarea>
+      </div>
+
+      <button class="user__change-pass" type="button">Change password</button>
+
+      <button class="user__save-changes" type="submit">Save changes</button>
     </form>
-    } @else { }
+    } @else if (userLoading === false && unique_id !==
+    userService.user?.unique_id) {
+    <button class="user__logo-overlay">
+      <img
+        [src]="user?.profile_pic"
+        alt="user-logo"
+        class="user__user-logo"
+        (click)="handleToggleDisplayPhoto()"
+      />
+    </button>
+
+    <div class="user__info">
+      <div class="user__full-name">
+        <h1 class="user__name">{{ user?.first_name }} {{ user?.last_name }}</h1>
+
+        <h5 class="user__unique-id">&#64;{{ user?.unique_id }}</h5>
+      </div>
+
+      <h5 class="user__since">
+        On Chatterbox since:
+        {{ user?.create_date | date : "yyyy-MM-dd hh:mm" : "UTC" }}
+      </h5>
+
+      <h5 class="user__desc">{{ user?.user_desc }}</h5>
+    </div>
+    }
   </div>
 </div>

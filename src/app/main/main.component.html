@@ -85,7 +85,7 @@
         <input
           type="text"
           class="main__computer-search-conversations__input"
-          placeholder="Search conversations"
+          placeholder="Search"
         />
         <button class="main__computer-search-conversations__icon" type="submit">
           <i class="fa-solid fa-magnifying-glass"></i>
@@ -167,7 +167,10 @@
 
     <div class="main__computer-conversation">
       <div class="main__computer-conversation-information">
-        <button class="main__computer-logo__overlay">
+        <button
+          routerLink="/user/murray-larson"
+          class="main__computer-logo__overlay"
+        >
           <div class="main__computer-logo__container">
             <img
               src="http://localhost:8080/static/m.png"
@@ -215,7 +218,7 @@
               <h1 class="main__computer-conversation__name">Murray Larson</h1>
               <h2 class="main__computer-user-desc">Lorem ipsum dolor sit</h2>
               <h2 class="main__computer-since">
-                On chatterbox since: 16 March 2024
+                On Chatterbox since: 16 March 2024
               </h2>
             </div>
           </div>
@@ -257,6 +260,9 @@
         ></textarea>
         <button class="main__computer-conversation__attach-image" type="button">
           <i class="fa-solid fa-image"></i>
+        </button>
+        <button class="main__computer-conversation__audio" type="button">
+          <i class="fa-solid fa-microphone"></i>
         </button>
         <button
           class="main__computer-conversation__send main__computer-conversation__send--disabled"

@@ -320,7 +320,8 @@
     }
 
     &-conversation__send,
-    &-conversation__attach-image {
+    &-conversation__attach-image,
+    &-conversation__audio {
       font-size: 19px;
       background: #f0f0f0;
       padding: 0 10px;
@@ -335,6 +336,7 @@
 
       &--disabled {
         color: #b7b7b7;
+        cursor: default;
       }
     }
 

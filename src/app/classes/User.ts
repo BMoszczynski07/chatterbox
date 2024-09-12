@@ -1,9 +1,11 @@
 export class User {
   private _id: number;
   private _unique_id: string;
-  private _name: string;
+  private _first_name: string;
+  private _last_name: string;
   private _pass: string;
   private _create_date: string;
+  private _user_desc: string;
   private _email: string;
   private _verified: string;
   private _socket_id: string;
@@ -12,9 +14,11 @@ export class User {
   constructor(
     _id: number,
     _unique_id: string,
-    _name: string,
+    _first_name: string,
+    _last_name: string,
     _pass: string,
     _create_date: string,
+    _user_desc: string,
     _email: string,
     _verified: string,
     _socket_id: string,
@@ -22,10 +26,12 @@ export class User {
   ) {
     this._id = _id;
     this._unique_id = _unique_id;
-    this._name = _name;
+    this._first_name = _first_name;
+    this._last_name = _last_name;
     this._pass = _pass;
     this._create_date = _create_date;
     this._email = _email;
+    this._user_desc = _user_desc;
     this._verified = _verified;
     this._socket_id = _socket_id;
     this._profile_pic = _profile_pic;
@@ -40,6 +46,15 @@ export class User {
     this._id = value;
   }
 
+  // Getter i Setter dla _user_desc
+  public get user_desc(): string {
+    return this._user_desc;
+  }
+
+  public set user_desc(value: string) {
+    this._user_desc = value;
+  }
+
   // Getter i Setter dla _unique_id
   public get unique_id(): string {
     return this._unique_id;
@@ -49,13 +64,22 @@ export class User {
     this._unique_id = value;
   }
 
-  // Getter i Setter dla _name
-  public get name(): string {
-    return this._name;
+  // Getter i Setter dla _first_name
+  public get first_name(): string {
+    return this._first_name;
   }
 
-  public set name(value: string) {
-    this._name = value;
+  public set first_name(value: string) {
+    this._first_name = value;
+  }
+
+  // Getter i Setter dla _last_name
+  public get last_name(): string {
+    return this._last_name;
+  }
+
+  public set last_name(value: string) {
+    this._last_name = value;
   }
 
   // Getter i Setter dla _pass

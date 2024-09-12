@@ -17,6 +17,28 @@ export class UserService {
 
   TOKEN_EXPIRES_IN = 1;
 
+  handleUnprotectedGetUser = async (unique_id: string) => {
+    try {
+      const userRequest = await fetch(
+        `${this.backendURLService.backendURL}/user/get-unprotected/${unique_id}`
+      );
+
+      if (!userRequest.ok) {
+        const errorData = await userRequest.json();
+        throw { message: errorData.message };
+      }
+
+      const data = await userRequest.json();
+
+      return data;
+    } catch (err: any) {
+      const errNotification = new Notification(err.message);
+      errNotification.handleCreate();
+
+      this.router.navigate(['/']);
+    }
+  };
+
   handleGetUser = async (token: string | null) => {
     const userRequest = await fetch(
       `${this.backendURLService.backendURL}/user/get`,
@@ -47,9 +69,11 @@ export class UserService {
     this.user = new User(
       data.id,
       data.unique_id,
-      data.name,
+      data.first_name,
+      data.last_name,
       data.pass,
       data.create_date,
+      data.user_desc,
       data.email,
       data.verified,
       data.socket_id,
@@ -81,10 +105,12 @@ export class UserService {
     this.user = new User(
       data.user.id,
       data.user.unique_id,
-      data.user.name,
+      data.user.first_name,
+      data.user.last_name,
       data.user.pass,
       data.user.create_date,
       data.user.email,
+      data.user.user_desc,
       data.user.verified,
       data.user.socket_id,
       data.user.profile_pic
@@ -97,6 +123,9 @@ export class UserService {
     document.cookie = `token=${data.token};path=/;expires=${tokenExpiresIn}`;
 
     this.router.navigate(['/']);
+
+    const loginNotification = new Notification('Singed in successfully');
+    loginNotification.handleCreate();
   };
 
   handleRegister = () => {};

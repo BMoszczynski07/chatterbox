@@ -2,14 +2,14 @@
 
 .user {
   width: calc(650px - 50px);
-  height: 340px;
+  height: 470px;
   padding: 25px;
   background: #fff;
   border-radius: 18px;
 
   @media (max-width: 768px) {
     width: calc(320px - 50px);
-    height: 450px;
+    height: 500px;
   }
 
   &__back {
@@ -32,13 +32,21 @@
     transition: 0.15s;
     border-radius: 50%;
     overflow: hidden;
-    cursor: pointer;
-    border: none;
     background: transparent;
+    border: none;
+    cursor: pointer;
+
+    &--display-photo {
+      width: 300px;
+      height: 300px;
+    }
   }
 
   &__user-logo {
     width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
   &__logo-pen {
@@ -47,14 +55,14 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(43, 43, 43, 0.669);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    cursor: pointer;
     font-size: 32px;
     color: #dedede;
+    border: none;
+    background: #00000086;
     opacity: 0;
     transition: 0.15s;
+    border-radius: 50%;
   }
 
   &__logo-overlay:hover &__logo-pen {
@@ -68,10 +76,15 @@
 
   &__information {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    flex-wrap: wrap;
     margin-top: 25px;
     gap: 42px;
+
+    @media (max-width: 768px) {
+      gap: 8px;
+    }
   }
 
   &__input-container {
@@ -88,9 +101,211 @@
     margin-bottom: 12px;
     font-size: 17px;
     font-family: $i;
+    background: #f0f0f0;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    resize: none;
   }
 
-  &__input:focus &__label {
-    color: #f00;
+  &__save-changes {
+    margin-top: 12px;
+    width: 150px;
+    background: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 5px;
+
+    &:hover {
+      background: lighten(#000, 25%);
+    }
   }
+
+  &__change-pass {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    width: 150px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__save-changes,
+  &__change-pass {
+    font-family: $i;
+  }
+
+  &__loading {
+    display: flex;
+    gap: 24px;
+  }
+
+  &__circle-loading {
+    width: 100px;
+    height: 100px;
+    background: #4a4a4a;
+    border-radius: 50%;
+  }
+
+  &__rect-loading {
+    width: 200px;
+    height: 15px;
+    background: #4a4a4a;
+    border-radius: 5px;
+    margin: 12px 0;
+  }
+
+  &__full-name {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__name {
+    font-size: 21px;
+    margin: 0;
+  }
+
+  &__unique-id {
+    font-size: 12px;
+    color: #737373;
+    margin: 0;
+  }
+
+  &__since {
+    margin: 0;
+    color: #535353;
+  }
+
+  &__desc {
+    background: #e4e4e4;
+    color: #4e4e4e;
+    padding: 8px;
+    border-radius: 5px;
+  }
+
+  &__display-photo {
+    width: 100%;
+    height: 100%;
+    background: #0000008c;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+
+    &__close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 42px;
+      color: #ff9696;
+    }
+  }
+
+  &__modal-background {
+    width: 100%;
+    height: 100%;
+    background: #0000008c;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+
+  &__modal {
+    width: 300px;
+    height: 500px;
+    background: #fff;
+    padding: 8px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__upload-photo__title {
+    font-size: 21px;
+  }
+
+  &__upload {
+    display: none;
+  }
+
+  &__custom-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__file {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__file-name {
+    margin: 0;
+    font-weight: 400;
+  }
+
+  &__file-size {
+    margin: 0;
+  }
+
+  &__choose-an-image,
+  &__upload-photo__button {
+    background: #000;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: none;
+    transition: 0.15s;
+    cursor: pointer;
+    font-family: $i;
+    letter-spacing: -0.2px;
+
+    &:hover {
+      background: lighten(#000, 25%);
+    }
+  }
+
+  &__upload-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: 0.15s;
+    border-radius: 5px;
+
+    &:hover {
+      background: darken(#fff, 15%);
+    }
+  }
+
+  &__upload-btns {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+  }
+}
+
+image-cropper {
+  display: block;
+  max-width: 100%;
+  margin: 20px auto;
+  width: 200px;
 }

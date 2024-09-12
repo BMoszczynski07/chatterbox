@@ -1,5 +1,6 @@
 export class Notification {
   private message: string;
+  private timeout: any;
 
   constructor(message: string) {
     this.message = message;
@@ -17,6 +18,7 @@ export class Notification {
     notificationClose.innerHTML = '<i class="fa-solid fa-xmark"></i>';
     notificationClose.classList.add('notification__close');
     notificationClose.addEventListener('click', () => {
+      clearTimeout(this.timeout);
       this.handleClose(notification);
     });
 
@@ -29,7 +31,7 @@ export class Notification {
 
     document.body.appendChild(notification);
 
-    setTimeout(() => {
+    this.timeout = setTimeout(() => {
       this.handleClose(notification);
     }, 3000);
   }
