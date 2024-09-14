@@ -11,7 +11,10 @@
       <div class="user__change-pass">
         <h1 class="user__change-pass__title">Change password</h1>
 
-        <form class="user__change-pass__form">
+        <form
+          (submit)="handleChangePass($event)"
+          class="user__change-pass__form"
+        >
           <div class="user__change-pass__form-group">
             <label class="user__change-pass__label" for="currentPassword"
               >Current password:</label
@@ -20,6 +23,8 @@
               type="password"
               id="currentPassword"
               class="user__change-pass__form-control"
+              [(ngModel)]="changePass.cur_pass"
+              [ngModelOptions]="{ standalone: true }"
               required
             />
           </div>
@@ -32,6 +37,8 @@
               type="password"
               id="newPassword"
               class="user__change-pass__form-control"
+              [(ngModel)]="changePass.new_pass"
+              [ngModelOptions]="{ standalone: true }"
               required
             />
           </div>
@@ -44,6 +51,8 @@
               type="password"
               id="repeatNewPassword"
               class="user__change-pass__form-control"
+              [(ngModel)]="changePass.confirm_new_pass"
+              [ngModelOptions]="{ standalone: true }"
               required
             />
           </div>
@@ -53,8 +62,8 @@
               Change password
             </button>
             <button
-              type="submit"
-              (close)="handleToggleChangePassModal()"
+              type="button"
+              (click)="handleToggleChangePassModal()"
               class="user__change-pass__close"
             >
               Close
@@ -215,7 +224,7 @@
 
       <button
         class="user__change-pass__btn"
-        (close)="handleToggleChangePassModal()"
+        (click)="handleToggleChangePassModal()"
         type="button"
       >
         Change password

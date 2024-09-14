@@ -58,6 +58,47 @@ export class UserComponent implements OnInit {
 
   changePassModal: boolean = false;
 
+  changePass = {
+    cur_pass: '',
+    new_pass: '',
+    confirm_new_pass: '',
+  };
+
+  async handleChangePass(e: Event) {
+    e.preventDefault();
+
+    const changePassRequest = await fetch(
+      `${this.backendUrlService.backendURL}/user/change-pass`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.cookieService.getCookieValue('token')}`,
+        },
+        body: JSON.stringify(this.changePass),
+      }
+    );
+
+    const changePassResponse = await changePassRequest.json();
+
+    this.changePassModal = false;
+
+    const changePassNotification = new Notification(changePassResponse.message);
+    changePassNotification.handleCreate();
+
+    if (changePassRequest.ok) {
+      document.cookie =
+        'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      this.router.navigate(['/login']);
+      this.userService.user = null;
+
+      const uniqueIdNotification = new Notification(
+        'Your password has been changed. You need to sign in again'
+      );
+      uniqueIdNotification.handleCreate();
+    }
+  }
+
   handleToggleChangePassModal() {
     this.changePassModal = !this.changePassModal;
   }
@@ -87,9 +128,11 @@ export class UserComponent implements OnInit {
     userNotification.handleCreate();
 
     if (
-      this.uniqueId.nativeElement.value !== this.userService.user?.unique_id
+      this.uniqueId.nativeElement.value !== this.userService.user?.unique_id &&
+      userRequest.ok
     ) {
-      document.cookie = '';
+      document.cookie =
+        'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       this.router.navigate(['/login']);
       this.userService.user = null;
 
