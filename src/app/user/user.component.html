@@ -5,7 +5,65 @@
   </button>
 
   <div class="user__information">
-    @if (uploadPhotoModal) {
+    @if (changePassModal) {
+
+    <div class="user__change-pass__background">
+      <div class="user__change-pass">
+        <h1 class="user__change-pass__title">Change password</h1>
+
+        <form class="user__change-pass__form">
+          <div class="user__change-pass__form-group">
+            <label class="user__change-pass__label" for="currentPassword"
+              >Current password:</label
+            >
+            <input
+              type="password"
+              id="currentPassword"
+              class="user__change-pass__form-control"
+              required
+            />
+          </div>
+
+          <div class="user__change-pass__form-group">
+            <label class="user__change-pass__label" for="newPassword"
+              >New password:</label
+            >
+            <input
+              type="password"
+              id="newPassword"
+              class="user__change-pass__form-control"
+              required
+            />
+          </div>
+
+          <div class="user__change-pass__form-group">
+            <label class="user__change-pass__label" for="repeatNewPassword"
+              >Repeat new password:</label
+            >
+            <input
+              type="password"
+              id="repeatNewPassword"
+              class="user__change-pass__form-control"
+              required
+            />
+          </div>
+
+          <div class="user__change-pass__btns">
+            <button type="submit" class="user__change-pass__submit">
+              Change password
+            </button>
+            <button
+              type="submit"
+              (close)="handleToggleChangePassModal()"
+              class="user__change-pass__close"
+            >
+              Close
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    } @if (uploadPhotoModal) {
     <div class="user__modal-background">
       <div class="user__modal">
         <h1 class="user__upload-photo__title">Upload an image</h1>
@@ -14,7 +72,7 @@
         <image-cropper
           [imageChangedEvent]="imageChangedEvent"
           [aspectRatio]="1"
-          format="png"
+          format="jpeg"
           (imageCropped)="handleImageCropped($event)"
           [cropperMinWidth]="100"
           [cropperMinHeight]="100"
@@ -71,7 +129,7 @@
         </form>
       </div>
     </div>
-    } @if (displayPhoto) {
+    } @if (displayPhotoModal) {
     <div class="user__display-photo">
       <button class="user__logo-overlay user__logo-overlay--display-photo">
         <img
@@ -83,7 +141,7 @@
 
       <button
         class="user__display-photo__close"
-        (click)="handleToggleDisplayPhoto()"
+        (click)="handleToggleDisplayPhotoModal()"
       >
         <i class="fa-solid fa-xmark"></i>
       </button>
@@ -110,48 +168,58 @@
       </button>
     </button>
 
-    <form class="user__form">
+    <form class="user__form" (submit)="handleSubmit($event)">
       <div class="user__input-container">
-        <label for="unique_id" class="user__label">Login</label>
+        <label for="unique_id" class="user__label">Login:</label>
         <input
           id="unique_id"
           type="text"
           class="user__input"
           [value]="userService.user?.unique_id"
+          #uniqueId
         />
       </div>
 
       <div class="user__input-container">
-        <label for="first-name" class="user__label">First name</label>
+        <label for="first-name" class="user__label">First name:</label>
         <input
           id="first-name"
           type="text"
           class="user__input"
           [value]="userService.user?.first_name"
+          #firstName
         />
       </div>
 
       <div class="user__input-container">
-        <label for="last-name" class="user__label">Last name</label>
+        <label for="last-name" class="user__label">Last name:</label>
         <input
           id="last-name"
           type="text"
           class="user__input"
           [value]="userService.user?.last_name"
+          #lastName
         />
       </div>
 
       <div class="user__input-container">
-        <label for="desc" class="user__label">Description</label>
+        <label for="desc" class="user__label">Description:</label>
         <textarea
           id="desc"
           type="text"
           class="user__input"
           [value]="userService.user?.user_desc"
+          #userDesc
         ></textarea>
       </div>
 
-      <button class="user__change-pass" type="button">Change password</button>
+      <button
+        class="user__change-pass__btn"
+        (close)="handleToggleChangePassModal()"
+        type="button"
+      >
+        Change password
+      </button>
 
       <button class="user__save-changes" type="submit">Save changes</button>
     </form>
@@ -162,7 +230,7 @@
         [src]="user?.profile_pic"
         alt="user-logo"
         class="user__user-logo"
-        (click)="handleToggleDisplayPhoto()"
+        (click)="handleToggleDisplayPhotoModal()"
       />
     </button>
 

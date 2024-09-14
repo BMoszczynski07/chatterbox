@@ -1,10 +1,4 @@
-import {
-  AfterViewChecked,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserService } from '../user.service';
 import { CookieService } from '../cookie.service';
@@ -14,11 +8,18 @@ import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { FileSizePipe } from '../file-size.pipe';
 import { BackendUrlService } from '../backend-url.service';
 import { Notification } from '../../notification/Notification';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [RouterModule, CommonModule, ImageCropperComponent, FileSizePipe],
+  imports: [
+    RouterModule,
+    CommonModule,
+    ImageCropperComponent,
+    FileSizePipe,
+    FormsModule,
+  ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
 })
@@ -37,11 +38,15 @@ export class UserComponent implements OnInit {
 
   user: User | null = null;
 
-  displayPhoto: boolean = false;
-
+  displayPhotoModal: boolean = false;
   uploadPhotoModal: boolean = false;
 
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
+
+  @ViewChild('uniqueId', { static: false }) uniqueIdEl!: ElementRef;
+  @ViewChild('firstName', { static: false }) firstNameEl!: ElementRef;
+  @ViewChild('lastName', { static: false }) lastNameEl!: ElementRef;
+  @ViewChild('userDesc', { static: false }) userDescEl!: ElementRef;
 
   fileName!: string;
   fileSize!: number;
@@ -49,9 +54,54 @@ export class UserComponent implements OnInit {
   imageChangedEvent!: Event;
   croppedImage: Blob | null | undefined;
 
+  @ViewChild('uniqueId') uniqueId!: ElementRef;
+
+  changePassModal: boolean = false;
+
+  handleToggleChangePassModal() {
+    this.changePassModal = !this.changePassModal;
+  }
+
+  async handleSubmit(e: Event): Promise<void> {
+    e.preventDefault();
+
+    const userRequest = await fetch(
+      `${this.backendUrlService.backendURL}/user/update`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.cookieService.getCookieValue('token')}`,
+        },
+        body: JSON.stringify({
+          unique_id: this.uniqueId.nativeElement.value,
+          first_name: this.firstNameEl.nativeElement.value,
+          last_name: this.lastNameEl.nativeElement.value,
+          user_desc: this.userDescEl.nativeElement.value,
+        }),
+      }
+    );
+
+    const userData = await userRequest.json();
+    const userNotification = new Notification(userData.message);
+    userNotification.handleCreate();
+
+    if (
+      this.uniqueId.nativeElement.value !== this.userService.user?.unique_id
+    ) {
+      document.cookie = '';
+      this.router.navigate(['/login']);
+      this.userService.user = null;
+
+      const uniqueIdNotification = new Notification(
+        'Your login has been changed. You need to sign in again'
+      );
+      uniqueIdNotification.handleCreate();
+    }
+  }
+
   handleFileChange(event: any): void {
     const input = event.target as HTMLInputElement;
-    console.log('handleFileChange');
 
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
@@ -116,7 +166,7 @@ export class UserComponent implements OnInit {
 
       this.uploadPhotoModal = false;
 
-      this.router.navigate([`/user/${this.userService.user?.unique_id}`]);
+      this.ngOnInit();
 
       const fileNotification = new Notification(fileRequestData.message);
       fileNotification.handleCreate();
@@ -135,14 +185,13 @@ export class UserComponent implements OnInit {
         this.cookieService.getCookieValue('token')
       );
     } catch (err) {
-      console.error(err);
-
       this.router.navigate(['/login']);
       this.userService.user = null;
     }
 
-    if (this.unique_id === this.userService.user) {
+    if (this.unique_id === this.userService.user?.unique_id) {
       this.userLoading = false;
+
       return;
     }
 
@@ -154,8 +203,8 @@ export class UserComponent implements OnInit {
     this.userLoading = false;
   }
 
-  handleToggleDisplayPhoto = () => {
-    this.displayPhoto = !this.displayPhoto;
+  handleToggleDisplayPhotoModal = () => {
+    this.displayPhotoModal = !this.displayPhotoModal;
   };
 
   handleToggleUploadPhotoModal = () => {

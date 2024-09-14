@@ -102,6 +102,8 @@
     font-size: 17px;
     font-family: $i;
     background: #f0f0f0;
+    color: #484848;
+    font-weight: 700;
     border: none;
     padding: 8px;
     border-radius: 5px;
@@ -118,12 +120,16 @@
     padding: 8px 12px;
     border-radius: 5px;
 
+    &[disabled] {
+      background: #f00;
+    }
+
     &:hover {
       background: lighten(#000, 25%);
     }
   }
 
-  &__change-pass {
+  &__change-pass__btn {
     border: none;
     background: transparent;
     cursor: pointer;
@@ -301,6 +307,76 @@
     margin-top: 12px;
     display: flex;
     gap: 8px;
+  }
+
+  &__change-pass {
+    position: relative;
+    background: #fff;
+    width: 300px;
+    height: 500px;
+    padding: 0 8px;
+    border-radius: 12px;
+
+    &__background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0000008c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    &__label {
+      font-size: 14px;
+      color: #4c4c4c;
+    }
+
+    &__form-group {
+      display: flex;
+      flex-direction: column;
+      margin: 12px 0;
+    }
+
+    &__form-control {
+      width: 200px;
+      background: #dbdbdb;
+      color: #4b4b4b;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      font-family: $i;
+    }
+
+    &__btns {
+      display: flex;
+      gap: 8px;
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+    }
+
+    &__submit,
+    &__close {
+      background: #000;
+      color: #fff;
+      border-radius: 5px;
+      font-size: 15px;
+      font-family: $i;
+      padding: 5px 8px;
+      font-weight: 500;
+      letter-spacing: -0.25px;
+      border: none;
+      transition: 0.15s;
+      cursor: pointer;
+
+      &:hover {
+        background: lighten(#000, 25%);
+      }
+    }
   }
 }
 

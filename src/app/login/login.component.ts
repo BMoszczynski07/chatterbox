@@ -34,8 +34,8 @@ export class LoginComponent implements OnInit {
         this.cookieService.getCookieValue('token')
       );
       this.router.navigate(['/']);
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      console.log(err.message);
     }
   }
 
