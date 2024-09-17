@@ -9,6 +9,7 @@ import { FileSizePipe } from '../file-size.pipe';
 import { BackendUrlService } from '../backend-url.service';
 import { Notification } from '../../notification/Notification';
 import { FormsModule } from '@angular/forms';
+import { PassRequirementsComponent } from '../pass-requirements/pass-requirements.component';
 
 @Component({
   selector: 'app-user',
@@ -19,6 +20,7 @@ import { FormsModule } from '@angular/forms';
     ImageCropperComponent,
     FileSizePipe,
     FormsModule,
+    PassRequirementsComponent,
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
@@ -63,6 +65,8 @@ export class UserComponent implements OnInit {
     new_pass: '',
     confirm_new_pass: '',
   };
+
+  passRequirements = false;
 
   async handleChangePass(e: Event) {
     e.preventDefault();

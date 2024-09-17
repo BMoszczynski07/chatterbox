@@ -31,6 +31,11 @@ export class Notification {
 
     document.body.appendChild(notification);
 
+    const notificationAudio = new Audio();
+    notificationAudio.src = 'notification.mp3';
+
+    notificationAudio.play();
+
     this.timeout = setTimeout(() => {
       this.handleClose(notification);
     }, 3000);

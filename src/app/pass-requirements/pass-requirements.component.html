@@ -1,0 +1,53 @@
+<div class="pass" @fadeIn @fadeOut>
+  <div class="pass__bar"></div>
+
+  <div class="pass__requirements">
+    <div class="pass__requirement">
+      @if (passRequirements.enoughLetters) {
+      <i class="fa-solid fa-check pass__check"></i>
+      } @else {
+      <i class="fa-solid fa-xmark"></i>
+      }
+
+      <h5 class="pass__requirement__text">
+        Password must be at least 8 characters long
+      </h5>
+    </div>
+
+    <div class="pass__requirement">
+      @if (passRequirements.hasUppercase) {
+      <i class="fa-solid fa-check pass__check"></i>
+      } @else {
+      <i class="fa-solid fa-xmark"></i>
+      }
+
+      <h5 class="pass__requirement__text">
+        Password must contains at least one capital letter
+      </h5>
+    </div>
+
+    <div class="pass__requirement">
+      @if (passRequirements.hasLowercase) {
+      <i class="fa-solid fa-check pass__check"></i>
+      } @else {
+      <i class="fa-solid fa-xmark"></i>
+      }
+
+      <h5 class="pass__requirement__text">
+        Password must contain at least one lowercase letter
+      </h5>
+    </div>
+
+    <div class="pass__requirement">
+      @if (passRequirements.specialCharacter) {
+      <i class="fa-solid fa-check pass__check"></i>
+      } @else {
+      <i class="fa-solid fa-xmark"></i>
+      }
+
+      <h5 class="pass__requirement__text">
+        Password must contain at least one special character
+      </h5>
+    </div>
+  </div>
+</div>

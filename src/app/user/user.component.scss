@@ -291,6 +291,12 @@
     }
   }
 
+  &__upload-photo__profile-pic {
+    width: 250px;
+    margin: 0 auto;
+    border-radius: 5px;
+  }
+
   &__upload-close {
     background: transparent;
     border: none;
@@ -343,7 +349,7 @@
     }
 
     &__form-control {
-      width: 200px;
+      width: 250px;
       background: #dbdbdb;
       color: #4b4b4b;
       padding: 8px;

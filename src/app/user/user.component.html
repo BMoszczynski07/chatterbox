@@ -34,6 +34,8 @@
               >New password:</label
             >
             <input
+              (focus)="passRequirements = !passRequirements"
+              (blur)="passRequirements = !passRequirements"
               type="password"
               id="newPassword"
               class="user__change-pass__form-control"
@@ -42,6 +44,12 @@
               required
             />
           </div>
+
+          @if (passRequirements) {
+          <app-pass-requirements
+            [newPass]="changePass.new_pass"
+          ></app-pass-requirements>
+          }
 
           <div class="user__change-pass__form-group">
             <label class="user__change-pass__label" for="repeatNewPassword"
@@ -86,6 +94,12 @@
           [cropperMinWidth]="100"
           [cropperMinHeight]="100"
         ></image-cropper>
+        } @else {
+        <img
+          [src]="userService.user?.profile_pic"
+          class="user__upload-photo__profile-pic"
+          alt="Profile pic"
+        />
         }
 
         <form class="user__modal-form">
