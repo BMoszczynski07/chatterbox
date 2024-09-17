@@ -5,8 +5,27 @@
         <img class="main__computer-site-logo" src="./icon.png" alt="logo" />
       </a>
 
+      @if (userModal) {
+      <div class="main__computer__user-modal">
+        <button
+          class="main__computer__user-modal__settings main__computer__user-modal__btn"
+          [routerLink]="'/user/' + userService.user?.unique_id"
+        >
+          <i class="fa-solid fa-gear"></i>
+          Ustawienia
+        </button>
+        <button
+          (click)="handleLogout()"
+          class="main__computer__user-modal__logout main__computer__user-modal__btn"
+        >
+          <i class="fa-solid fa-right-from-bracket"></i>
+          Wyloguj się
+        </button>
+      </div>
+      }
+
       <button
-        [routerLink]="'/user/' + userService.user?.unique_id"
+        (click)="userModal = !userModal"
         class="main__computer-logo__overlay"
       >
         <div class="main__computer-logo__container">

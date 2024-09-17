@@ -17,6 +17,7 @@
     }
 
     &-user {
+      position: relative;
       width: 50px;
       display: flex;
       flex-direction: column;
@@ -413,6 +414,40 @@
         padding: 0;
         width: 300px;
       }
+    }
+
+    &__user-modal {
+      position: absolute;
+      bottom: 50px;
+      border-radius: 5px;
+      left: 0;
+      width: 200px;
+      height: 300px;
+      background: rgb(229, 229, 229);
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+    }
+
+    &__user-modal__btn {
+      padding: 12px;
+      display: flex;
+      gap: 8px;
+      border: none;
+      background: transparent;
+      transition: 0.15s;
+      cursor: pointer;
+      font-family: $i;
+
+      &:hover {
+        background: #dddddd;
+      }
+    }
+
+    &__user-modal__logout {
+      color: #d43030;
     }
   }
 

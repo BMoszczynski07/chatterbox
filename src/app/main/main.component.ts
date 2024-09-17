@@ -5,6 +5,7 @@ import { CookieService } from '../cookie.service';
 import { SocketService } from '../socket.service';
 import { User } from '../classes/User';
 import { BackendUrlService } from '../backend-url.service';
+import { Notification } from '../../notification/Notification';
 
 @Component({
   selector: 'app-main',
@@ -23,6 +24,17 @@ export class MainComponent implements OnInit {
   ) {}
 
   public activeUsers: User[] = [];
+
+  public userModal: boolean = false;
+
+  handleLogout() {
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    this.userService.user = null;
+    this.router.navigate(['/login']);
+
+    const logoutNotification = new Notification('You logged out successfully');
+    logoutNotification.handleCreate();
+  }
 
   async ngOnInit(): Promise<void> {
     try {
