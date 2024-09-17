@@ -77,7 +77,8 @@ export class UserService {
       data.email,
       data.verified,
       data.socket_id,
-      data.profile_pic
+      data.profile_pic,
+      data.is_active
     );
   };
 
@@ -113,7 +114,8 @@ export class UserService {
       data.user.user_desc,
       data.user.verified,
       data.user.socket_id,
-      data.user.profile_pic
+      data.user.profile_pic,
+      data.user.is_active
     );
 
     const tokenExpiresIn = new Date();

@@ -10,6 +10,7 @@ export class User {
     public email: string,
     public verified: boolean,
     public socket_id: string,
-    public profile_pic: string
+    public profile_pic: string,
+    public is_active: string
   ) {}
 }

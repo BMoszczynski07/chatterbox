@@ -24,57 +24,29 @@
         <div
           class="main__computer-active-icon main__computer-active-icon--small"
         ></div>
-        Active users (3)
+        Active users ({{ activeUsers.length }})
       </h1>
 
       <div class="main__computer-active-users">
+        @for (activeUser of activeUsers; track activeUser) {
         <button class="main__computer-active-user">
           <div class="main__computer-logo__overlay">
             <div class="main__computer-logo__container">
               <img
-                src="http://localhost:8080/static/l.png"
+                [src]="activeUser.profile_pic"
                 class="main__computer-user-logo"
-                alt="A"
+                alt="Profile pic"
               />
             </div>
 
             <div class="main__computer-active-icon"></div>
           </div>
 
-          <h5 class="main__computer-active-user__name">Lara Erikson</h5>
+          <h5 class="main__computer-active-user__name">
+            {{ activeUser.first_name }} {{ activeUser.last_name }}
+          </h5>
         </button>
-
-        <button class="main__computer-active-user">
-          <div class="main__computer-logo__overlay">
-            <div class="main__computer-logo__container">
-              <img
-                src="http://localhost:8080/static/d.png"
-                class="main__computer-user-logo"
-                alt="A"
-              />
-            </div>
-
-            <div class="main__computer-active-icon"></div>
-          </div>
-
-          <h5 class="main__computer-active-user__name">Dan Stinson</h5>
-        </button>
-
-        <button class="main__computer-active-user">
-          <div class="main__computer-logo__overlay">
-            <div class="main__computer-logo__container">
-              <img
-                src="http://localhost:8080/static/m.png"
-                class="main__computer-user-logo"
-                alt="A"
-              />
-            </div>
-
-            <div class="main__computer-active-icon"></div>
-          </div>
-
-          <h5 class="main__computer-active-user__name">Murray Larson</h5>
-        </button>
+        }
       </div>
 
       <h1 class="main__computer-all-conversations__header">
