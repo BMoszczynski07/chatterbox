@@ -2,17 +2,19 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { BackendUrlService } from './backend-url.service';
 import { CookieService } from './cookie.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocketService {
-  private socket!: Socket;
+  public socket!: Socket;
   private readonly socketIoURL: string = 'http://localhost:3000';
 
   constructor(
     private readonly backendUrlService: BackendUrlService,
-    private readonly cookieService: CookieService
+    private readonly cookieService: CookieService,
+    private readonly userService: UserService
   ) {}
 
   handleConnect() {
@@ -40,6 +42,12 @@ export class SocketService {
 
         return;
       }
+
+      this.socket.emit('active-user', this.userService.user);
+    });
+
+    this.socket.on('disconnect', () => {
+      console.log('Socket disconnected');
     });
   }
 }

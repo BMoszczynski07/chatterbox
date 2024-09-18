@@ -3,6 +3,7 @@ import { BackendUrlService } from './backend-url.service';
 import { User } from './classes/User';
 import { Router } from '@angular/router';
 import { Notification } from '../notification/Notification';
+import { CookieService } from './cookie.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,8 @@ import { Notification } from '../notification/Notification';
 export class UserService {
   constructor(
     private backendURLService: BackendUrlService,
-    private router: Router
+    private router: Router,
+    private cookieService: CookieService
   ) {}
 
   user: User | null = null;
@@ -81,6 +83,39 @@ export class UserService {
       data.is_active
     );
   };
+
+  async handleLogout() {
+    try {
+      const unsetActiveRequest = await fetch(
+        `${this.backendURLService.backendURL}/user/unset-active`,
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${this.cookieService.getCookieValue(
+              'token'
+            )}`,
+          },
+        }
+      );
+
+      if (!unsetActiveRequest.ok) {
+        const unsetActiveResponse = await unsetActiveRequest.json();
+
+        throw new Error(unsetActiveResponse);
+      }
+    } catch (err: any) {
+      console.error('Error -> ' + err);
+    }
+
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+    this.router.navigate(['/login']);
+
+    this.user = null;
+
+    const logoutNotification = new Notification('You logged out successfully');
+    logoutNotification.handleCreate();
+  }
 
   handleLogin = async (user: { username: string; password: string }) => {
     const findUserRequest = await fetch(

@@ -8,14 +8,27 @@
       @if (userModal) {
       <div class="main__computer__user-modal">
         <button
+          class="main__computer__user-modal__archive main__computer__user-modal__btn"
+        >
+          <i class="fa-solid fa-comment-dots"></i>
+          Nowe wiadomości
+          <span class="main__computer__new-chats">1</span>
+        </button>
+        <button
+          class="main__computer__user-modal__archive main__computer__user-modal__btn"
+        >
+          <i class="fa-solid fa-box-archive"></i>
+          Archiwum
+        </button>
+        <button
+          (focus)="handleRedirectToUserSettings()"
           class="main__computer__user-modal__settings main__computer__user-modal__btn"
-          [routerLink]="'/user/' + userService.user?.unique_id"
         >
           <i class="fa-solid fa-gear"></i>
           Ustawienia
         </button>
         <button
-          (click)="handleLogout()"
+          (focus)="handleLogout()"
           class="main__computer__user-modal__logout main__computer__user-modal__btn"
         >
           <i class="fa-solid fa-right-from-bracket"></i>
@@ -25,7 +38,8 @@
       }
 
       <button
-        (click)="userModal = !userModal"
+        (focus)="userModal = !userModal"
+        (blur)="userModal = !userModal"
         class="main__computer-logo__overlay"
       >
         <div class="main__computer-logo__container">

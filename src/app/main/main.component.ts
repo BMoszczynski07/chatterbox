@@ -27,13 +27,13 @@ export class MainComponent implements OnInit {
 
   public userModal: boolean = false;
 
-  handleLogout() {
-    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    this.userService.user = null;
-    this.router.navigate(['/login']);
+  handleRedirectToUserSettings() {
+    this.router.navigate([`/user/${this.userService.user?.unique_id}`]);
+  }
 
-    const logoutNotification = new Notification('You logged out successfully');
-    logoutNotification.handleCreate();
+  async handleLogout() {
+    this.socketService.socket.emit('inactive-user', this.userService.user);
+    await this.userService.handleLogout();
   }
 
   async ngOnInit(): Promise<void> {
@@ -72,6 +72,41 @@ export class MainComponent implements OnInit {
       }
 
       this.activeUsers = activeUsersResponse;
+
+      this.socketService.socket.on('inactive-user', (userPayload) => {
+        console.log('inactive-user', userPayload);
+
+        this.activeUsers = this.activeUsers.filter(
+          (activeUser) => activeUser.id !== userPayload.id
+        );
+      });
+
+      this.socketService.socket.on('active-user', (userPayload) => {
+        console.log('active-user', userPayload);
+
+        const user = new User(
+          userPayload.id,
+          userPayload.unique_id,
+          userPayload.first_name,
+          userPayload.last_name,
+          userPayload.pass,
+          new Date(userPayload.create_date),
+          userPayload.user_desc,
+          userPayload.email,
+          userPayload.verified,
+          userPayload.socket_id,
+          userPayload.profile_pic,
+          userPayload.is_active
+        );
+
+        const findActiveFriend = this.activeUsers.find(
+          (activeUser) => activeUser.id === userPayload.id
+        );
+
+        if (!findActiveFriend) {
+          this.activeUsers.push(user);
+        }
+      });
     } catch (err) {
       console.error('Error -> ' + err);
     }

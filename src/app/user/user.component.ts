@@ -10,6 +10,7 @@ import { BackendUrlService } from '../backend-url.service';
 import { Notification } from '../../notification/Notification';
 import { FormsModule } from '@angular/forms';
 import { PassRequirementsComponent } from '../pass-requirements/pass-requirements.component';
+import { SocketService } from '../socket.service';
 
 @Component({
   selector: 'app-user',
@@ -31,7 +32,8 @@ export class UserComponent implements OnInit {
     private cookieService: CookieService,
     private route: ActivatedRoute,
     private router: Router,
-    private backendUrlService: BackendUrlService
+    private backendUrlService: BackendUrlService,
+    private socketService: SocketService
   ) {}
 
   unique_id: string | null = null;
@@ -91,10 +93,8 @@ export class UserComponent implements OnInit {
     changePassNotification.handleCreate();
 
     if (changePassRequest.ok) {
-      document.cookie =
-        'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      this.router.navigate(['/login']);
-      this.userService.user = null;
+      this.socketService.socket.emit('inactive-user', this.userService.user);
+      await this.userService.handleLogout();
 
       const uniqueIdNotification = new Notification(
         'Your password has been changed. You need to sign in again'
@@ -135,10 +135,8 @@ export class UserComponent implements OnInit {
       this.uniqueId.nativeElement.value !== this.userService.user?.unique_id &&
       userRequest.ok
     ) {
-      document.cookie =
-        'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      this.router.navigate(['/login']);
-      this.userService.user = null;
+      this.socketService.socket.emit('inactive-user', this.userService.user);
+      await this.userService.handleLogout();
 
       const uniqueIdNotification = new Notification(
         'Your login has been changed. You need to sign in again'
