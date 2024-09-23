@@ -75,15 +75,25 @@
             <div class="main__computer-active-icon"></div>
           </div>
 
-          <h5 class="main__computer-active-user__name">
-            {{ activeUser.first_name }} {{ activeUser.last_name }}
-          </h5>
+          <div class="main__computer-active__user-name">
+            <h5 class="main__computer-active__first-name">
+              {{ activeUser.first_name }}
+            </h5>
+            <h5 class="main__computer-active__last-name">
+              {{ activeUser.last_name }}
+            </h5>
+          </div>
         </button>
+        } @if (activeUsers.length === 0) {
+        <h5 class="main__computer__no-active-users">
+          <i class="fa-solid fa-user-slash"></i>
+          No active users
+        </h5>
         }
       </div>
 
       <h1 class="main__computer-all-conversations__header">
-        Conversations (3)
+        Conversations ({{ userConversations.length }})
       </h1>
 
       <form class="main__computer-search-conversations__form">
@@ -98,29 +108,9 @@
       </form>
 
       <div class="main__computer-all-conversations">
-        <button class="main__computer-one-conversation">
-          <div class="main__computer-logo__overlay">
-            <div class="main__computer-logo__container">
-              <img
-                src="http://localhost:8080/static/l.png"
-                class="main__computer-user-logo"
-                alt="A"
-              />
-            </div>
-          </div>
-
-          <div class="main__computer-conversation-info">
-            <h1 class="main__computer-conversation-name">Lara Erikson</h1>
-            <h2
-              class="main__computer-conversation-last-message main__computer-conversation-last-message--unread"
-            >
-              Hello, Bartek! How are you doing?
-            </h2>
-            <h3 class="main__computer-conversation-sent">
-              <i class="fa-solid fa-circle-check"></i> Sent at 1:45 PM
-            </h3>
-          </div>
-        </button>
+        @for (conversation of userConversations; track conversation) { @if
+        (conversation.conversationparticipants_conversation.is_group) { } @else
+        { } }
 
         <button
           class="main__computer-one-conversation main__computer-one-conversation--selected"

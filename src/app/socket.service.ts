@@ -15,7 +15,13 @@ export class SocketService {
     private readonly backendUrlService: BackendUrlService,
     private readonly cookieService: CookieService,
     private readonly userService: UserService
-  ) {}
+  ) {
+    window.addEventListener('beforeunload', () => {
+      if (this.socket) {
+        this.socket.emit('inactive-user', this.userService.user);
+      }
+    });
+  }
 
   handleConnect() {
     this.socket = io(this.socketIoURL);
@@ -47,6 +53,7 @@ export class SocketService {
     });
 
     this.socket.on('disconnect', () => {
+      this.socket.emit('inactive-user', this.userService.user);
       console.log('Socket disconnected');
     });
   }

@@ -5,7 +5,6 @@ import { CookieService } from '../cookie.service';
 import { SocketService } from '../socket.service';
 import { User } from '../classes/User';
 import { BackendUrlService } from '../backend-url.service';
-import { Notification } from '../../notification/Notification';
 
 @Component({
   selector: 'app-main',
@@ -24,6 +23,8 @@ export class MainComponent implements OnInit {
   ) {}
 
   public activeUsers: User[] = [];
+
+  public userConversations = [];
 
   public userModal: boolean = false;
 
@@ -44,11 +45,41 @@ export class MainComponent implements OnInit {
     } catch (err) {
       console.error(err);
 
-      this.router.navigate(['/login']);
-      this.userService.user = null;
+      if (this.userService.user) {
+        this.userService.handleLogout();
+      } else {
+        this.router.navigate(['/login']);
+      }
     }
 
     this.socketService.handleConnect();
+
+    try {
+      const userConversationsRequest = await fetch(
+        `${this.backendUrlService.backendURL}/messages/get-conversations`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${this.cookieService.getCookieValue(
+              'token'
+            )}`,
+          },
+        }
+      );
+
+      const userConversationsResponse = await userConversationsRequest.json();
+
+      if (!userConversationsRequest.ok) {
+        throw new Error(
+          'Failed to fetch user conversations: ' +
+            userConversationsResponse.message
+        );
+      }
+
+      this.userConversations = userConversationsResponse;
+    } catch (err) {
+      console.error(err);
+    }
 
     try {
       const activeUsersRequest = await fetch(

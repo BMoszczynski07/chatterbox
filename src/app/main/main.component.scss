@@ -98,7 +98,7 @@
       margin: 0 5px;
       padding: 12px;
       min-width: 100px;
-      max-width: 100px;
+      height: 120px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -113,10 +113,27 @@
       }
     }
 
-    &-active-user__name {
+    &-active__user-name {
+      width: 70px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    &-active__first-name,
+    &-active__last-name {
       margin: 0;
       font-weight: 500;
       font-family: $i;
+    }
+
+    &__no-active-users {
+      margin: 50px auto;
+      font-weight: 400;
+      letter-spacing: -0.4px;
+      font-size: 14px;
+      color: #767676;
     }
 
     &-active-icon {
