@@ -24,7 +24,7 @@ export class MainComponent implements OnInit {
 
   public activeUsers: User[] = [];
 
-  public userConversations = [];
+  public userConversations: any = [];
 
   public userModal: boolean = false;
 
@@ -77,6 +77,8 @@ export class MainComponent implements OnInit {
       }
 
       this.userConversations = userConversationsResponse;
+
+      console.log(this.userConversations);
     } catch (err) {
       console.error(err);
     }

@@ -62,11 +62,52 @@
       }
     }
 
+    &-user-logo__users-count {
+      background: rgb(194, 194, 194);
+      font-weight: 600;
+      color: #5b5b5b;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     &-logo__container {
       width: 100%;
       height: 100%;
       border-radius: 50%;
       overflow: hidden;
+    }
+
+    &-logo__overlay--group {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      margin: 5px;
+    }
+
+    &-user-logo--top-left,
+    &-user-logo--bottom-right {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    &-user-logo--top-left {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    &-user-logo--bottom-right {
+      position: absolute;
+      bottom: 0;
+      right: 0;
     }
 
     &-user-logo {
