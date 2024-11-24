@@ -107,8 +107,13 @@
       </form>
 
       <div class="main__computer-all-conversations">
-        @for (conversation of userConversations; track conversation) {
-        <button class="main__computer-one-conversation">
+        @for (conversation of userConversations; track conversation; let index =
+        $index) {
+        <button
+          class="main__computer-one-conversation"
+          (click)="handleLoadMessages(index)"
+        >
+          @if (!conversation.conversationparticipants_conversation.group_pic) {
           @if
           (conversation.conversationparticipants_conversation.ConversationParticipants.length
           === 0) {
@@ -180,6 +185,18 @@
               }}</span
             >
           </div>
+          } } @else {
+          <div class="main__computer-logo__overlay">
+            <div class="main__computer-logo__container">
+              <img
+                [src]="
+                  conversation.conversationparticipants_conversation.group_pic
+                "
+                class="main__computer-user-logo"
+                alt="Profile pic"
+              />
+            </div>
+          </div>
           }
 
           <div class="main__computer-conversation-info">
@@ -237,21 +254,23 @@
       <!-- <div class="main__computer-all-conversations"> @for (conversation of userConversations; track conversation) { @if (conversation.conversationparticipants_conversation.is_group) { <button class="main__computer-one-conversation"> @if (conversation.conversationparticipants_conversation.ConversationParticipants.length === 1) { <div class="main__computer-logo__overlay"> <div class="main__computer-logo__container"> <img [src]=" conversation.conversationparticipants_conversation .ConversationParticipants[0].profile_pic " class="main__computer-user-logo" alt="A" /> </div> </div> } @else if (conversation.conversationparticipants_conversation.ConversationParticipants.length === 2) { <div class="main__computer-logo__overlay"> <div class="main__computer-logo__container"> <img [src]=" conversation.conversationparticipants_conversation .ConversationParticipants[0].profile_pic " class="main__computer-user-logo" alt="A" /> </div> <div class="main__computer-logo__container"></div> <img [src]=" conversation.conversationparticipants_conversation .ConversationParticipants[1].profile_pic " class="main__computer-user-logo" alt="A" /> </div> </div> } <div class="main__computer-conversation-info"> <h1 class="main__computer-conversation-name">Lara Erikson</h1> <h2 class="main__computer-conversation-last-message main__computer-conversation-last-message--unread" > Hello, Bartek! How are you doing? </h2> <h3 class="main__computer-conversation-sent"> <i class="fa-solid fa-circle-check"></i> Sent at 1:45 PM </h3> </div> </button> } @else { } } </div> -->
     </div>
 
+    @if (loadedConversation !== null) {
     <div class="main__computer-conversation">
       <div class="main__computer-conversation-information">
-        <button
-          routerLink="/user/murray-larson"
-          class="main__computer-logo__overlay"
-        >
+        @if
+        (userConversations[loadedConversation].conversationparticipants_conversation.is_group
+        === 0) {
+        <button class="main__computer-logo__overlay">
           <div class="main__computer-logo__container">
             <img
-              src="http://localhost:8080/static/m.png"
+              [src]="userService.user?.profile_pic"
               class="main__computer-user-logo"
               alt="A"
             />
           </div>
-          <div class="main__computer-active-icon"></div>
+          <!-- <div class="main__computer-active-icon"></div> -->
         </button>
+        }
 
         <div class="main__computer-conversation-information__overlay">
           <h1 class="main__computer-name-of-conversation">Murray Larson</h1>
@@ -259,7 +278,9 @@
         </div>
 
         <button class="main__computer-conversation__more-btn">
-          <i class="fa-solid fa-ellipsis main__computer-conversation__more"></i>
+          <i
+            class="fa-solid fa-circle-info main__computer-conversation__more"
+          ></i>
         </button>
       </div>
 
@@ -285,7 +306,29 @@
             </button>
 
             <div class="main__computer-conversation__start-info">
-              <h1 class="main__computer-conversation__name">Murray Larson</h1>
+              <h1 class="main__computer-conversation__name">
+                @if
+                (userConversations[loadedConversation].conversationparticipants_conversation.is_group)
+                {
+                {{
+                  userConversations[loadedConversation]
+                    .conversationparticipants_conversation.title
+                }}
+                } @else {
+                {{
+                  userConversations[loadedConversation]
+                    .conversationparticipants_conversation
+                    .ConversationParticipants[0].conversationparticipants_user
+                    .first_name
+                }}
+                {{
+                  userConversations[loadedConversation]
+                    .conversationparticipants_conversation
+                    .ConversationParticipants[0].conversationparticipants_user
+                    .last_name
+                }}
+                }
+              </h1>
               <h2 class="main__computer-user-desc">Lorem ipsum dolor sit</h2>
               <h2 class="main__computer-since">
                 On Chatterbox since: 16 March 2024
@@ -298,29 +341,16 @@
           </h3>
         </div>
 
+        @for (message of loadedMessages; track message) {
         <div
-          class="main__computer-message__container main__computer-message__container--mine"
+          [class.main__computer-message__container--mine]="
+            message.user_id === userService.user?.id
+          "
+          class="main__computer-message__container"
         >
-          <h5 class="main__computer-message">
-            Lorem ipsum dolor sit amet consectetur
-          </h5>
+          <h5 class="main__computer-message">{{ message.content }}</h5>
         </div>
-
-        <div class="main__computer-message__container">
-          <h5 class="main__computer-message">
-            Lorem ipsum dolor sit amet consectetur
-          </h5>
-        </div>
-
-        <div
-          class="main__computer-message__container main__computer-message__container--mine"
-        >
-          <img
-            src="http://localhost:8080/static/amogus.jpg"
-            class="main__computer-message main__computer-message--image"
-            alt="message"
-          />
-        </div>
+        }
       </div>
 
       <form class="main__computer-conversation__send-message__form">
@@ -332,8 +362,8 @@
           <i class="fa-solid fa-image"></i>
         </button>
         <!-- <button class="main__computer-conversation__audio" type="button">
-          <i class="fa-solid fa-microphone"></i>
-        </button> -->
+            <i class="fa-solid fa-microphone"></i>
+          </button> -->
         <button
           class="main__computer-conversation__send main__computer-conversation__send--disabled"
           type="submit"
@@ -342,6 +372,7 @@
         </button>
       </form>
     </div>
+    }
 
     <div class="main__phone"></div>
   </div>

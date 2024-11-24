@@ -5,6 +5,7 @@ import { CookieService } from '../cookie.service';
 import { SocketService } from '../socket.service';
 import { User } from '../classes/User';
 import { BackendUrlService } from '../backend-url.service';
+import { Message } from '../classes/Message';
 
 @Component({
   selector: 'app-main',
@@ -27,6 +28,40 @@ export class MainComponent implements OnInit {
   public userConversations: any = [];
 
   public userModal: boolean = false;
+
+  public loadedConversation: number | null = null;
+
+  public loadedMessages: Message[] = [];
+
+  async handleLoadMessages(index: number) {
+    this.loadedConversation = index;
+
+    try {
+      const response = await fetch(
+        `${this.backendUrlService.backendURL}/messages/get-messages/${this.userConversations[index].conversationparticipants_conversation.id}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${this.cookieService.getCookieValue(
+              'token'
+            )}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      this.loadedMessages = data;
+
+      console.log(this.loadedMessages);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   handleRedirectToUserSettings() {
     this.router.navigate([`/user/${this.userService.user?.unique_id}`]);
