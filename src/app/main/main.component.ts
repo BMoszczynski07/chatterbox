@@ -6,11 +6,12 @@ import { SocketService } from '../socket.service';
 import { User } from '../classes/User';
 import { BackendUrlService } from '../backend-url.service';
 import { Message } from '../classes/Message';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, FormsModule],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })
@@ -33,12 +34,47 @@ export class MainComponent implements OnInit {
 
   public loadedMessages: Message[] = [];
 
-  async handleLoadMessages(index: number) {
-    this.loadedConversation = index;
+  messageContent: string = '';
+
+  sendMessage(event: Event): void {
+    event.preventDefault();
+
+    if (!this.messageContent) return;
+
+    const uniqueId =
+      this.userConversations[this.loadedConversation!]
+        .conversationparticipants_conversation.ConversationParticipants[0]
+        .conversationparticipants_user.unique_id;
+
+    console.log(this.loadedConversation);
+
+    const message = new Message(
+      this.loadedConversation!,
+      this.userService.user?.id || 0,
+      new Date(),
+      this.messageContent,
+      'message',
+      '',
+      null
+    );
+
+    this.socketService.socket.emit('send-message', { uniqueId, message });
+    this.loadedMessages.push(message);
+    this.messageContent = '';
+  }
+
+  handleGroupClick() {}
+
+  async handleLoadMessages(id: number) {
+    this.loadedConversation = id;
+
+    const findConversation = this.userConversations.find(
+      (conv: any) => conv.conversationparticipants_conversation.id === id
+    );
 
     try {
       const response = await fetch(
-        `${this.backendUrlService.backendURL}/messages/get-messages/${this.userConversations[index].conversationparticipants_conversation.id}`,
+        `${this.backendUrlService.backendURL}/messages/get-messages/${id}`,
         {
           method: 'GET',
           headers: {
@@ -140,6 +176,12 @@ export class MainComponent implements OnInit {
       }
 
       this.activeUsers = activeUsersResponse;
+
+      this.socketService.socket.on('receive-message', (message: any) => {
+        console.log('receive-message', message);
+
+        this.loadedMessages.push(message);
+      });
 
       this.socketService.socket.on('inactive-user', (userPayload) => {
         console.log('inactive-user', userPayload);

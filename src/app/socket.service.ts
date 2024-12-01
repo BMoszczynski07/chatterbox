@@ -23,6 +23,13 @@ export class SocketService {
     });
   }
 
+  sendMediaToUser(uniqueId: string, formData: FormData) {
+    this.socket.emit('send-media', {
+      uniqueId,
+      file: formData.get('file'),
+    });
+  }
+
   handleConnect() {
     this.socket = io(this.socketIoURL);
 
