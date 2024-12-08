@@ -345,7 +345,10 @@ export class MainComponent implements OnInit {
               message.conversation_id
           );
 
-          this.userConversations[index] = getConversationResponse;
+          const firstConversation = this.userConversations[0];
+
+          this.userConversations[index] = firstConversation;
+          this.userConversations[0] = getConversationResponse;
 
           console.log(this.userConversations);
         } catch (err) {
