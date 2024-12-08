@@ -92,13 +92,17 @@
       </div>
 
       <h1 class="main__computer-all-conversations__header">
-        Conversations ({{ userConversations.length }})
+        @if (loadedUsers !== null) { Users found ({{ loadedUsers.length }}) }
+        @else if (userConversations !== null) { Conversations ({{
+          userConversations.length
+        }}) }
       </h1>
 
       <form class="main__computer-search-conversations__form">
         <input
           type="text"
           class="main__computer-search-conversations__input"
+          (input)="handleSearchUsers($event)"
           placeholder="Search"
         />
         <button class="main__computer-search-conversations__icon" type="submit">
@@ -106,8 +110,10 @@
         </button>
       </form>
 
+      @if (userConversations !== null) {
+
       <div class="main__computer-all-conversations">
-        @for (conversation of userConversations; track conversation;) {
+        @for (conversation of userConversations; track conversation) {
         <button
           class="main__computer-one-conversation"
           (click)="
@@ -250,13 +256,13 @@
             </h1>
             }
             <!-- <h2
-              [class]="
-                conversation.conversationparticipants_conversation.Messages[0]
-                  ?.messageViews.length > 0
-                  ? 'main__computer-conversation-last-message'
-                  : 'main__computer-conversation-last-message main__computer-conversation-last-message--unread'
-              "
-            > -->
+                [class]="
+                  conversation.conversationparticipants_conversation.Messages[0]
+                    ?.messageViews.length > 0
+                    ? 'main__computer-conversation-last-message'
+                    : 'main__computer-conversation-last-message main__computer-conversation-last-message--unread'
+                "
+              > -->
             <h2 class="main__computer-conversation-last-message">
               @if
               (conversation.conversationparticipants_conversation.Messages[0]) {
@@ -282,6 +288,26 @@
         </button>
         }
       </div>
+      } @else if (loadedUsers !== null) {
+      <div class="main__computer-users__found">
+        @for (user of loadedUsers; track user; let index = $index) {
+        <button
+          class="main__computer-user__found"
+          (click)="handleContactClick(index)"
+        >
+          <img
+            [src]="user.profile_pic"
+            class="main__computer-user__found-logo"
+            alt="Profile pic"
+          />
+
+          <h5 class="main__computer-user__found-name">
+            {{ user.first_name }} {{ user.last_name }}
+          </h5>
+        </button>
+        }
+      </div>
+      }
 
       <!-- <div class="main__computer-all-conversations"> @for (conversation of userConversations; track conversation) { @if (conversation.conversationparticipants_conversation.is_group) { <button class="main__computer-one-conversation"> @if (conversation.conversationparticipants_conversation.ConversationParticipants.length === 1) { <div class="main__computer-logo__overlay"> <div class="main__computer-logo__container"> <img [src]=" conversation.conversationparticipants_conversation .ConversationParticipants[0].profile_pic " class="main__computer-user-logo" alt="A" /> </div> </div> } @else if (conversation.conversationparticipants_conversation.ConversationParticipants.length === 2) { <div class="main__computer-logo__overlay"> <div class="main__computer-logo__container"> <img [src]=" conversation.conversationparticipants_conversation .ConversationParticipants[0].profile_pic " class="main__computer-user-logo" alt="A" /> </div> <div class="main__computer-logo__container"></div> <img [src]=" conversation.conversationparticipants_conversation .ConversationParticipants[1].profile_pic " class="main__computer-user-logo" alt="A" /> </div> </div> } <div class="main__computer-conversation-info"> <h1 class="main__computer-conversation-name">Lara Erikson</h1> <h2 class="main__computer-conversation-last-message main__computer-conversation-last-message--unread" > Hello, Bartek! How are you doing? </h2> <h3 class="main__computer-conversation-sent"> <i class="fa-solid fa-circle-check"></i> Sent at 1:45 PM </h3> </div> </button> } @else { } } </div> -->
     </div>
@@ -289,11 +315,9 @@
     @if (loadedConversation !== null) {
     <div class="main__computer-conversation">
       <div class="main__computer-conversation-information">
-        @if
-        (userConversations[loadedConversation].conversationparticipants_conversation.is_group)
+        @if (loadedConversation.conversationparticipants_conversation.is_group)
         { @if
-        (userConversations[loadedConversation].conversationparticipants_conversation.group_pic)
-        {
+        (loadedConversation.conversationparticipants_conversation.group_pic) {
         <button
           class="main__computer-logo__overlay"
           (click)="handleGroupClick()"
@@ -301,8 +325,8 @@
           <div class="main__computer-logo__container">
             <img
               [src]="
-                userConversations[loadedConversation]
-                  .conversationparticipants_conversation.group_pic
+                loadedConversation.conversationparticipants_conversation
+                  .group_pic
               "
               class="main__computer-user-logo"
               alt="A"
@@ -311,7 +335,7 @@
           <!-- <div class="main__computer-active-icon"></div> -->
         </button>
         } @else { @if
-        (userConversations[loadedConversation].conversationparticipants_conversation.ConversationParticipants.length
+        (loadedConversation.conversationparticipants_conversation.ConversationParticipants.length
         === 0) {
         <button
           class="main__computer-logo__overlay"
@@ -326,7 +350,7 @@
           </div>
         </button>
         } @if
-        (userConversations[loadedConversation].conversationparticipants_conversation.ConversationParticipants.length
+        (loadedConversation.conversationparticipants_conversation.ConversationParticipants.length
         === 1) {
         <button
           class="main__computer-logo__overlay"
@@ -335,8 +359,7 @@
           <div class="main__computer-logo__container">
             <img
               [src]="
-                userConversations[loadedConversation]
-                  .conversationparticipants_conversation
+                loadedConversation.conversationparticipants_conversation
                   .ConversationParticipants[0].conversationparticipants_user
                   .profile_pic
               "
@@ -346,7 +369,7 @@
           </div>
         </button>
         } @if
-        (userConversations[loadedConversation].conversationparticipants_conversation.ConversationParticipants.length
+        (loadedConversation.conversationparticipants_conversation.ConversationParticipants.length
         === 2) {
         <button
           class="main__computer-logo__overlay"
@@ -355,8 +378,7 @@
           <div class="main__computer-logo__container">
             <img
               [src]="
-                userConversations[loadedConversation]
-                  .conversationparticipants_conversation
+                loadedConversation.conversationparticipants_conversation
                   .ConversationParticipants[0].conversationparticipants_user
                   .profile_pic
               "
@@ -365,8 +387,7 @@
             />
             <img
               [src]="
-                userConversations[loadedConversation]
-                  .conversationparticipants_conversation
+                loadedConversation.conversationparticipants_conversation
                   .ConversationParticipants[1].conversationparticipants_user
                   .profile_pic
               "
@@ -376,7 +397,7 @@
           </div>
         </button>
         } @else if
-        (userConversations[loadedConversation].conversationparticipants_conversation.ConversationParticipants.length
+        (loadedConversation.conversationparticipants_conversation.ConversationParticipants.length
         > 2) {
         <button
           class="main__computer-logo__overlay"
@@ -385,8 +406,7 @@
           <div class="main__computer-logo__container">
             <img
               [src]="
-                userConversations[loadedConversation]
-                  .conversationparticipants_conversation
+                loadedConversation.conversationparticipants_conversation
                   .ConversationParticipants[0].conversationparticipants_user
                   .profile_pic
               "
@@ -395,8 +415,7 @@
             />
             <span class="main__computer-user-logo__users-count"
               >+{{
-                userConversations[loadedConversation]
-                  .conversationparticipants_conversation
+                loadedConversation.conversationparticipants_conversation
                   .ConversationParticipants.length
               }}</span
             >
@@ -406,17 +425,16 @@
         <button
           [routerLink]="
             '/user/' +
-            userConversations[loadedConversation]
-              .conversationparticipants_conversation.ConversationParticipants[0]
-              .conversationparticipants_user.unique_id
+            loadedConversation.conversationparticipants_conversation
+              .ConversationParticipants[0].conversationparticipants_user
+              .unique_id
           "
           class="main__computer-logo__overlay"
         >
           <div class="main__computer-logo__container">
             <img
               [src]="
-                userConversations[loadedConversation]
-                  .conversationparticipants_conversation
+                loadedConversation.conversationparticipants_conversation
                   .ConversationParticipants[0].conversationparticipants_user
                   .profile_pic
               "
@@ -430,14 +448,12 @@
         <div class="main__computer-conversation-information__overlay">
           <h1 class="main__computer-name-of-conversation">
             {{
-              userConversations[loadedConversation]
-                .conversationparticipants_conversation
+              loadedConversation.conversationparticipants_conversation
                 .ConversationParticipants[0].conversationparticipants_user
                 .first_name
             }}
             {{
-              userConversations[loadedConversation]
-                .conversationparticipants_conversation
+              loadedConversation.conversationparticipants_conversation
                 .ConversationParticipants[0].conversationparticipants_user
                 .last_name
             }}
@@ -460,8 +476,7 @@
             <button
               [routerLink]="
                 '/user/' +
-                userConversations[loadedConversation]
-                  .conversationparticipants_conversation
+                loadedConversation.conversationparticipants_conversation
                   .ConversationParticipants[0].conversationparticipants_user
                   .unique_id
               "
@@ -470,8 +485,7 @@
               <div class="main__computer-logo__container">
                 <img
                   [src]="
-                    userConversations[loadedConversation]
-                      .conversationparticipants_conversation
+                    loadedConversation.conversationparticipants_conversation
                       .ConversationParticipants[0].conversationparticipants_user
                       .profile_pic
                   "
@@ -487,22 +501,19 @@
             <div class="main__computer-conversation__start-info">
               <h1 class="main__computer-conversation__name">
                 @if
-                (userConversations[loadedConversation].conversationparticipants_conversation.is_group)
+                (loadedConversation.conversationparticipants_conversation.is_group)
                 {
                 {{
-                  userConversations[loadedConversation]
-                    .conversationparticipants_conversation.title
+                  loadedConversation.conversationparticipants_conversation.title
                 }}
                 } @else {
                 {{
-                  userConversations[loadedConversation]
-                    .conversationparticipants_conversation
+                  loadedConversation.conversationparticipants_conversation
                     .ConversationParticipants[0].conversationparticipants_user
                     .first_name
                 }}
                 {{
-                  userConversations[loadedConversation]
-                    .conversationparticipants_conversation
+                  loadedConversation.conversationparticipants_conversation
                     .ConversationParticipants[0].conversationparticipants_user
                     .last_name
                 }}
@@ -512,8 +523,7 @@
               <h2 class="main__computer-since">
                 On Chatterbox since:
                 {{
-                  userConversations[loadedConversation]
-                    .conversationparticipants_conversation
+                  loadedConversation.conversationparticipants_conversation
                     .ConversationParticipants[0].conversationparticipants_user
                     .create_date
                 }}
@@ -522,7 +532,17 @@
           </div>
 
           <h3 class="main__computer-start">
-            This is the beginning of your conversation with Murray Larson
+            This is the beginning of your conversation with
+            {{
+              loadedConversation.conversationparticipants_conversation
+                .ConversationParticipants[0].conversationparticipants_user
+                .first_name
+            }}
+            {{
+              loadedConversation.conversationparticipants_conversation
+                .ConversationParticipants[0].conversationparticipants_user
+                .last_name
+            }}
           </h3>
         </div>
 
@@ -548,9 +568,9 @@
           class="main__computer-conversation__send-message"
           placeholder="Type your message"
         ></textarea>
-        <button class="main__computer-conversation__attach-image" type="button">
+        <!-- <button class="main__computer-conversation__attach-image" type="button">
           <i class="fa-solid fa-image"></i>
-        </button>
+        </button> -->
         <!-- <input
           type="file"
           class="hidden-file-input"

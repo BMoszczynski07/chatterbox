@@ -30,26 +30,94 @@ export class MainComponent implements OnInit {
 
   public userModal: boolean = false;
 
-  public loadedConversation: number | null = null;
+  public loadedConversation: any = null;
+
+  public loadedUsers: any = null;
 
   public loadedMessages: Message[] = [];
 
+  public contactsRequest: any = [];
+
   messageContent: string = '';
 
-  sendMessage(event: Event): void {
+  async handleContactClick(contactIndex: number) {
+    try {
+      const createNewContactRequest = await fetch(
+        `${this.backendUrlService.backendURL}/users/create-contact/${this.loadedUsers[contactIndex].id}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${this.cookieService.getCookieValue(
+              'token'
+            )}`,
+          },
+        }
+      );
+
+      const createNewContactResponse = await createNewContactRequest.json();
+
+      if (!createNewContactRequest.ok) {
+        throw new Error('error!' + createNewContactResponse.message);
+      }
+
+      this.loadedConversation = createNewContactResponse;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async handleSearchUsers(e: any): Promise<void> {
+    if (e.target.value === '') {
+      this.loadedUsers = null;
+
+      this.handleLoadUserConversations();
+
+      return;
+    }
+
+    try {
+      this.userConversations = null;
+
+      this.contactsRequest = await fetch(
+        `${this.backendUrlService.backendURL}/users/get-contacts/${e.target.value}`
+      );
+
+      const contactsResponse = await this.contactsRequest.json();
+
+      if (!this.contactsRequest.ok) {
+        throw new Error('error! ' + contactsResponse.message);
+      }
+
+      if (!this.areUsersEqual(this.loadedUsers, contactsResponse)) {
+        this.loadedUsers = contactsResponse; // Aktualizuj tylko jeśli dane są inne
+      }
+
+      console.log(contactsResponse);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  areUsersEqual(users1: User[] | null, users2: User[]): boolean {
+    if (!users1 || users1.length !== users2.length) {
+      return false;
+    }
+    return users1.every((user, index) => user.id === users2[index].id);
+  }
+
+  async sendMessage(event: Event): Promise<void> {
     event.preventDefault();
 
     if (!this.messageContent) return;
 
     const uniqueId =
-      this.userConversations[this.loadedConversation!]
-        .conversationparticipants_conversation.ConversationParticipants[0]
-        .conversationparticipants_user.unique_id;
+      this.loadedConversation.conversationparticipants_conversation
+        .ConversationParticipants[0].conversationparticipants_user.unique_id;
 
     console.log(this.loadedConversation);
 
     const message = new Message(
-      this.loadedConversation!,
+      this.loadedConversation.conversationparticipants_conversation.id!,
       this.userService.user?.id || 0,
       new Date(),
       this.messageContent,
@@ -61,16 +129,72 @@ export class MainComponent implements OnInit {
     this.socketService.socket.emit('send-message', { uniqueId, message });
     this.loadedMessages.push(message);
     this.messageContent = '';
+
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 100);
+
+    if (this.loadedUsers) return;
+
+    try {
+      const getConversationRequest = await fetch(
+        `${this.backendUrlService.backendURL}/messages/get-conversation/${message.conversation_id}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${this.cookieService.getCookieValue(
+              'token'
+            )}`,
+          },
+        }
+      );
+
+      console.log('getConversationRequest...');
+
+      const getConversationResponse = await getConversationRequest.json();
+
+      if (!getConversationRequest.ok) {
+        throw new Error(
+          'Failed to fetch conversation: ' + getConversationResponse.message
+        );
+      }
+
+      const index = this.userConversations.findIndex(
+        (conversation: any) =>
+          conversation.conversationparticipants_conversation.id ===
+          message.conversation_id
+      );
+
+      const firstConversation = this.userConversations[0];
+
+      this.userConversations[index] = firstConversation;
+      this.userConversations[0] = getConversationResponse;
+
+      console.log(this.userConversations);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   handleGroupClick() {}
 
-  async handleLoadMessages(id: number) {
-    this.loadedConversation = id;
+  scrollToBottom(): void {
+    const container = document.querySelector(
+      '.main__computer-conversation__messages'
+    );
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }
 
+  async handleLoadMessages(id: number) {
     const findConversation = this.userConversations.find(
       (conv: any) => conv.conversationparticipants_conversation.id === id
     );
+
+    this.loadedConversation = findConversation;
+
+    console.log(id);
 
     try {
       const response = await fetch(
@@ -93,6 +217,10 @@ export class MainComponent implements OnInit {
 
       this.loadedMessages = data;
 
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 100);
+
       console.log(this.loadedMessages);
     } catch (err) {
       console.error(err);
@@ -108,23 +236,7 @@ export class MainComponent implements OnInit {
     await this.userService.handleLogout();
   }
 
-  async ngOnInit(): Promise<void> {
-    try {
-      await this.userService.handleGetUser(
-        this.cookieService.getCookieValue('token')
-      );
-    } catch (err) {
-      console.error(err);
-
-      if (this.userService.user) {
-        this.userService.handleLogout();
-      } else {
-        this.router.navigate(['/login']);
-      }
-    }
-
-    this.socketService.handleConnect();
-
+  async handleLoadUserConversations() {
     try {
       const userConversationsRequest = await fetch(
         `${this.backendUrlService.backendURL}/messages/get-conversations`,
@@ -153,6 +265,26 @@ export class MainComponent implements OnInit {
     } catch (err) {
       console.error(err);
     }
+  }
+
+  async ngOnInit(): Promise<void> {
+    try {
+      await this.userService.handleGetUser(
+        this.cookieService.getCookieValue('token')
+      );
+    } catch (err) {
+      console.error(err);
+
+      if (this.userService.user) {
+        this.userService.handleLogout();
+      } else {
+        this.router.navigate(['/login']);
+      }
+    }
+
+    this.socketService.handleConnect();
+
+    this.handleLoadUserConversations();
 
     try {
       const activeUsersRequest = await fetch(
@@ -177,10 +309,55 @@ export class MainComponent implements OnInit {
 
       this.activeUsers = activeUsersResponse;
 
-      this.socketService.socket.on('receive-message', (message: any) => {
+      this.socketService.socket.on('receive-message', async (message: any) => {
         console.log('receive-message', message);
 
-        this.loadedMessages.push(message);
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 100);
+
+        try {
+          const getConversationRequest = await fetch(
+            `${this.backendUrlService.backendURL}/messages/get-conversation/${message.conversation_id}`,
+            {
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${this.cookieService.getCookieValue(
+                  'token'
+                )}`,
+              },
+            }
+          );
+
+          console.log('getConversationRequest...');
+
+          const getConversationResponse = await getConversationRequest.json();
+
+          if (!getConversationRequest.ok) {
+            throw new Error(
+              'Failed to fetch conversation: ' + getConversationResponse.message
+            );
+          }
+
+          const index = this.userConversations.findIndex(
+            (conversation: any) =>
+              conversation.conversationparticipants_conversation.id ===
+              message.conversation_id
+          );
+
+          this.userConversations[index] = getConversationResponse;
+
+          console.log(this.userConversations);
+        } catch (err) {
+          console.error(err);
+        }
+
+        if (
+          this.loadedConversation?.conversationparticipants_conversation
+            .conversation_id === message.id
+        ) {
+          this.loadedMessages.push(message);
+        }
       });
 
       this.socketService.socket.on('inactive-user', (userPayload) => {

@@ -468,6 +468,7 @@
       border-radius: 5px;
       font-weight: 400;
       margin: 0 5px;
+      max-width: 300px;
 
       &--image {
         padding: 0;
@@ -520,6 +521,47 @@
 
     &__user-modal__logout {
       color: #d43030;
+    }
+
+    &-users__found {
+      height: 300px;
+      overflow-y: scroll;
+      padding: 0;
+
+      &::-webkit-scrollbar {
+        width: 3px;
+        background: #c4c4c4;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #747474;
+      }
+    }
+
+    &-user__found {
+      width: calc(100% - 10px);
+      background: transparent;
+      border: none;
+      margin: 5px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      font-family: $i;
+      justify-content: flex-start;
+      transition: 0.15s;
+      cursor: pointer;
+
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+
+    &-user__found-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin: 12px;
     }
   }
 
