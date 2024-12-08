@@ -42,6 +42,38 @@ export class MainComponent implements OnInit {
 
   async handleContactClick(contactIndex: number) {
     try {
+      const findConversationRequest = await fetch(
+        `${this.backendUrlService.backendURL}/users/find-contact/${this.loadedUsers[contactIndex].id}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${this.cookieService.getCookieValue(
+              'token'
+            )}`,
+          },
+        }
+      );
+
+      const findConversationResponse = await findConversationRequest.json();
+
+      if (!findConversationRequest.ok) {
+        throw new Error('error!' + findConversationResponse.message);
+      }
+
+      if (findConversationResponse !== null) {
+        this.loadedConversation = findConversationResponse;
+
+        this.handleLoadMessages(
+          this.loadedConversation.conversationparticipants_conversation.id
+        );
+
+        return;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
+    try {
       const createNewContactRequest = await fetch(
         `${this.backendUrlService.backendURL}/users/create-contact/${this.loadedUsers[contactIndex].id}`,
         {
@@ -187,15 +219,21 @@ export class MainComponent implements OnInit {
     }
   }
 
-  async handleLoadMessages(id: number) {
+  async handleLoadConversation(id: number) {
     const findConversation = this.userConversations.find(
       (conv: any) => conv.conversationparticipants_conversation.id === id
     );
 
     this.loadedConversation = findConversation;
 
+    console.log(this.loadedConversation);
+
     console.log(id);
 
+    this.handleLoadMessages(id);
+  }
+
+  async handleLoadMessages(id: number) {
     try {
       const response = await fetch(
         `${this.backendUrlService.backendURL}/messages/get-messages/${id}`,

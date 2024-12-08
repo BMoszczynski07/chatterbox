@@ -19,8 +19,34 @@ export class SocketService {
     window.addEventListener('beforeunload', () => {
       if (this.socket) {
         this.socket.emit('inactive-user', this.userService.user);
+
+        this.handleUnsetActive();
       }
     });
+  }
+
+  async handleUnsetActive() {
+    try {
+      const unsetActiveRequest = await fetch(
+        `${this.backendUrlService.backendURL}/user/unset-active`,
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${this.cookieService.getCookieValue(
+              'token'
+            )}`,
+          },
+        }
+      );
+
+      if (!unsetActiveRequest.ok) {
+        const unsetActiveResponse = await unsetActiveRequest.json();
+
+        throw new Error(unsetActiveResponse);
+      }
+    } catch (err: any) {
+      console.error('Error -> ' + err);
+    }
   }
 
   sendMediaToUser(uniqueId: string, formData: FormData) {
