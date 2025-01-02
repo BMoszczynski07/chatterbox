@@ -5,7 +5,43 @@
         <img class="main__computer-site-logo" src="./icon.png" alt="logo" />
       </a>
 
-      @if (userModal) {
+      <span class="main__computer__user-btns">
+        <button class="main__computer__user-btn main__computer__user-bell">
+          <i class="fa-regular fa-comment-dots"></i>
+
+          <span class="main__computer__user-bell__new-messages">2</span>
+        </button>
+
+        <button class="main__computer__user-btn main__computer__user-archive">
+          <i class="fa-regular fa-folder"></i>
+        </button>
+
+        <button class="main__computer__user-btn main__computer__user-settings">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <button
+          (click)="handleRedirectToUserSettings()"
+          class="main__computer-logo__overlay"
+        >
+          <div class="main__computer-logo__container">
+            <img
+              [src]="userService.user?.profile_pic"
+              alt="user-logo"
+              class="main__computer-user-logo"
+            />
+          </div>
+        </button>
+
+        <button
+          (click)="handleLogout()"
+          class="main__computer__user-btn main__computer__user-sign-out"
+        >
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </span>
+
+      <!-- @if (userModal) {
       <div class="main__computer__user-modal">
         <button
           class="main__computer__user-modal__archive main__computer__user-modal__btn"
@@ -49,7 +85,7 @@
             class="main__computer-user-logo"
           />
         </div>
-      </button>
+      </button> -->
     </div>
 
     <div class="main__computer-conversations">
