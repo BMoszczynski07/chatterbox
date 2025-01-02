@@ -96,6 +96,34 @@ export class MainComponent implements OnInit {
     } catch (err) {
       console.error(err);
     }
+
+    this.handleGetActiveUsers();
+  }
+
+  async handleGetActiveUsers() {
+    try {
+      const activeUsersRequest = await fetch(
+        `${this.backendUrlService.backendURL}/user/active-users/${this.userService.user?.id}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${this.cookieService.getCookieValue(
+              'token'
+            )}`,
+          },
+        }
+      );
+
+      const activeUsersResponse = await activeUsersRequest.json();
+
+      if (!activeUsersRequest.ok) {
+        throw new Error('error!' + activeUsersResponse.message);
+      }
+
+      this.activeUsers = activeUsersResponse;
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   async handleSearchUsers(e: any): Promise<void> {
@@ -385,6 +413,9 @@ export class MainComponent implements OnInit {
 
           if (index === -1) {
             this.userConversations.unshift(getConversationResponse);
+
+            this.handleGetActiveUsers();
+
             return;
           }
 
