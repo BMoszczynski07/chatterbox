@@ -383,6 +383,11 @@ export class MainComponent implements OnInit {
               message.conversation_id
           );
 
+          if (index === -1) {
+            this.userConversations.unshift(getConversationResponse);
+            return;
+          }
+
           const firstConversation = this.userConversations[0];
 
           this.userConversations[index] = firstConversation;
