@@ -273,4 +273,50 @@
     </div>
     }
   </div>
+
+  <button (click)="deleteModal = !deleteModal" class="user__delete-account">
+    <i class="fa-regular fa-trash-can"></i>
+
+    Delete account
+  </button>
+
+  @if (deleteModal) {
+  <div class="user__delete-account__background">
+    <div class="user__delete-account__modal">
+      <h1 class="user__delete-account__title">Delete account</h1>
+
+      <h5 class="user__delete-account__subtitle">
+        In order to delete account you need to type your login
+      </h5>
+
+      <form
+        class="user__delete-account__form"
+        (submit)="handleDeleteAccount($event)"
+      >
+        <input
+          type="text"
+          class="user__delete-account__input"
+          placeholder="Login"
+          [(ngModel)]="deleteLogin"
+          [ngModelOptions]="{ standalone: true }"
+        />
+
+        <h5 class="user__delete-account__modal-err">{{ deleteModalErr }}</h5>
+
+        <div class="user__delete-account__btns">
+          <button class="user__delete-account__confirm" type="submit">
+            Delete
+          </button>
+          <button
+            type="button"
+            (click)="deleteModal = !deleteModal"
+            class="user__delete-account__cancel"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
 </div>

@@ -36,6 +36,12 @@ export class UserComponent implements OnInit {
     private socketService: SocketService
   ) {}
 
+  deleteModal: boolean = false;
+
+  deleteLogin!: string;
+
+  deleteModalErr!: string;
+
   unique_id: string | null = null;
 
   userLoading: boolean = true;
@@ -69,6 +75,50 @@ export class UserComponent implements OnInit {
   };
 
   passRequirements = false;
+
+  async handleDeleteAccount(e: Event): Promise<void> {
+    e.preventDefault();
+
+    this.deleteModalErr = '';
+
+    if (this.deleteLogin !== this.userService.user?.unique_id) {
+      this.deleteModalErr = 'Invalid login';
+      return;
+    }
+
+    try {
+      const deleteAccountRequest = await fetch(
+        `${this.backendUrlService.backendURL}/user/delete`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${this.cookieService.getCookieValue(
+              'token'
+            )}`,
+          },
+        }
+      );
+
+      const deleteAccountResponse = await deleteAccountRequest.json();
+
+      if (!deleteAccountRequest.ok) {
+        throw new Error(deleteAccountResponse.message);
+      }
+
+      const successNotification = new Notification(
+        deleteAccountResponse.message
+      );
+
+      successNotification.handleCreate();
+
+      this.userService.handleLogout();
+    } catch (err: any) {
+      const errNotification = new Notification(err.message);
+
+      errNotification.handleCreate();
+      return;
+    }
+  }
 
   async handleChangePass(e: Event) {
     e.preventDefault();

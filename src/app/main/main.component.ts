@@ -7,11 +7,12 @@ import { User } from '../classes/User';
 import { BackendUrlService } from '../backend-url.service';
 import { Message } from '../classes/Message';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterModule, FormsModule],
+  imports: [RouterModule, FormsModule, CommonModule],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })

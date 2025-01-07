@@ -561,7 +561,7 @@
                 {{
                   loadedConversation.conversationparticipants_conversation
                     .ConversationParticipants[0].conversationparticipants_user
-                    .create_date
+                    .create_date | date : "yyyy-MM-dd hh:mm" : "UTC"
                 }}
               </h2>
             </div>
@@ -604,16 +604,21 @@
           class="main__computer-conversation__send-message"
           placeholder="Type your message"
         ></textarea>
-        <!-- <button class="main__computer-conversation__attach-image" type="button">
-          <i class="fa-solid fa-image"></i>
-        </button> -->
-        <!-- <input
+        <label for="file-upload">
+          <button
+            class="main__computer-conversation__attach-image"
+            type="button"
+          >
+            <i class="fa-solid fa-image"></i>
+          </button>
+        </label>
+        <input
+          id="file-upload"
           type="file"
           class="hidden-file-input"
-          (change)="onFileSelected($event)"
           accept="image/*"
           hidden
-        /> -->
+        />
         <!-- <button class="main__computer-conversation__audio" type="button">
             <i class="fa-solid fa-microphone"></i>
           </button> -->
